@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'hackyeah2024'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A0A448FB14AF4DA4BE21F5B279C40C2B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6AE49E1B7260445DB1CCCCAD36984D3E }}
