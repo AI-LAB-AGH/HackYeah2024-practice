@@ -1,0 +1,4 @@
+.videoplayer {
+    @apply p-12
+    bg-gradient-to-bl from-slate-900 via-slate-900 to-slate-600
+}

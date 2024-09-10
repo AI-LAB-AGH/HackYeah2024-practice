@@ -1,0 +1,78 @@
+html {
+    @apply bg-slate-900
+}
+
+.section-wrapper{
+    @apply flex flex-row;
+}
+
+.section {
+    @apply mr-0 h-fit min-h-screen flex flex-wrap justify-center
+}
+
+.section.mid {
+    opacity: 1;
+    width: 65%;
+    overflow: hidden;
+    transition: all ease-in-out 1s 0.3s;
+    @apply flex flex-row
+}
+.section.mid.squeeze {
+    transition: all ease-in-out 1s 0s;
+    opacity: 0;
+    @apply w-0;
+}
+
+.section.side {
+    transition: all ease-in-out 1s 0.3s;
+    width: 30%;
+    @apply 
+    bg-gradient-to-l from-slate-800 to-slate-900
+    flex flex-row flex-wrap
+    border-l-2 border-l-slate-800
+}
+.section.side.stretch {
+    transition: all ease-in-out 1s 0s;
+    width: 100%;
+}
+
+.section.wide {
+    width: 90%;
+}
+
+.section-separator {
+    width: 100%;
+    @apply border-slate-800 border-2;
+}
+
+.subsection-title{
+    width: 80%;
+    @apply text-nowrap mx-auto mt-4 text-2xl lg:text-3xl xl:text-5xl text-white font-bold p-6
+}
+
+.subsection-content{
+    transition: all ease-in-out 0.5s 0.5s;
+    max-width: 3000px;
+    overflow: hidden;
+    height: fit-content;
+}
+.subsection-content.squeeze {
+    max-width: 0;
+}
+
+.switch {
+    width: 5%;
+    @apply flex 
+}
+
+.switch-button {
+    transition: all ease-in-out 0.3s;
+    @apply w-24 aspect-square
+    text-white font-bold text-center
+    my-auto mx-2
+    rounded-lg shadow-md border-2 border-slate-800
+}
+
+.switch-button:hover {
+    @apply bg-slate-800
+}
