@@ -50,14 +50,13 @@ def mp4_to_wav(file_path):
 
 def speech_to_text(file_path):
     recognizer = sr.Recognizer()
-    AZURE_SPEECH_KEY = "9cf400b6a7a3492c90b1ad0f6bd640f6"
     with sr.AudioFile(file_path) as audio:
         speech = recognizer.record(audio)
+        return "Sample transcript"
         try:
             text = recognizer.recognize_google(speech, language='pl-PL')
-            # text = recognizer.recognize_azure(speech, key=AZURE_SPEECH_KEY)
             print("Transkrypt: " + text)
             return text
 
         except:
-            print("Nie rozpoznano")
+            return "Nie rozpoznano"
