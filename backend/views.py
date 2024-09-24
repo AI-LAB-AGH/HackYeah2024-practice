@@ -24,10 +24,10 @@ def upload_video(request):
             for chunk in video.chunks():
                 destination.write(chunk)
                 
-        audio_path = mp4_to_wav(file_path)
-        transcript = speech_to_text(audio_path)
+        # audio_path = mp4_to_wav(file_path)
+        # transcript = speech_to_text(audio_path)
 
-        return JsonResponse({'message': 'Video uploaded successfully!', 'transcript': transcript})
+        return JsonResponse({'message': 'Video uploaded successfully!', 'transcript': "transcript"})
 
     return JsonResponse({'error': 'No video file uploaded'}, status=400)
 
@@ -39,9 +39,6 @@ def get_video(request):
 
 
 def mp4_to_wav(file_path):
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"The video file at {file_path} does not exist")
-
     audio = AudioSegment.from_file(file_path, format='mp4')
     audio_path = file_path.replace('.mp4', '.wav')
     audio.export(audio_path, format='wav')
