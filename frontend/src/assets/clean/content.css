@@ -1,0 +1,31 @@
+html {
+    @apply bg-slate-900
+}
+
+.wrapper {
+    background-image: url("/static/bg.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    @apply w-screen h-screen flex
+}
+
+.content {
+    width: 90%;
+    @apply h-fit m-auto flex flex-row flex-wrap justify-center
+}
+
+.content-element {
+    @apply flex flex-wrap flex-row justify-center
+    h-fit my-auto overflow-hidden
+}
+.content-element.player {
+    width: 30%;
+}
+.content-element.info {
+    max-width: 70%;
+}
+.content-element.hide {
+    transition: all ease-in-out 1s;
+    width: 0;
+}

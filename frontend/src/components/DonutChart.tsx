@@ -27,9 +27,7 @@ const DonutChart = ({ chartData }: Props) => {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: false,
-          // backgroundColor: ["#00dd67", "#ffc60d", "#eb0000"],
-          backgroundColor: "#00dd67",
+          // backgroundColor: "#00dd67",
 
           plugins: {
             legend: {

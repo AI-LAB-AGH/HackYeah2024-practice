@@ -2,3 +2,17 @@
     @apply p-12
     bg-gradient-to-bl from-slate-900 via-slate-900 to-slate-600
 }
+
+.videoplayer-wrapper{
+    width: 80%;
+    @apply relative my-auto
+}
+.videoplayer-content {
+    position: absolute;
+    overflow: hidden;
+    width: 53%;
+    height: 46%;
+    top: 8%;
+    left: 24%;
+    @apply rounded-3xl
+}

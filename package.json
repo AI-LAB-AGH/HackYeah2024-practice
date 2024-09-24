@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/dom-webcodecs": "^0.1.11"
+  }
+}

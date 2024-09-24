@@ -3,7 +3,10 @@ html {
 }
 
 .section-wrapper{
-    @apply flex flex-row;
+    background-image: url("bg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    @apply flex flex-row justify-center;
 }
 
 .section {
@@ -12,7 +15,7 @@ html {
 
 .section.mid {
     opacity: 1;
-    width: 65%;
+    width: 60%;
     overflow: hidden;
     transition: all ease-in-out 1s 0.3s;
     @apply flex flex-row
@@ -25,11 +28,13 @@ html {
 
 .section.side {
     transition: all ease-in-out 1s 0.3s;
-    width: 30%;
+    width: 20%;
     @apply 
-    bg-gradient-to-l from-slate-800 to-slate-900
     flex flex-row flex-wrap
     border-l-2 border-l-slate-800
+}
+.section.side.grad{
+    @apply bg-gradient-to-l from-slate-800 to-slate-900
 }
 .section.side.stretch {
     transition: all ease-in-out 1s 0s;

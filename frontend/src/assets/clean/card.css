@@ -1,0 +1,39 @@
+.card-wrapper {
+    transition: all ease-in-out 1s;
+    width: 40%;
+    min-width: 200px;
+    opacity: 1;
+    @apply flex flex-col overflow-hidden
+    text-white border-4 rounded-lg border-slate-600
+    p-4 mx-5 h-96
+}
+.card-wrapper.hide {
+    transition: all ease-in-out 1s;
+    width: 0;
+    min-width: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.card-title {
+    transition: all ease-in-out 0.5s 0.5s;
+    @apply text-nowrap text-slate-200 sm:text-sm md:text-xl lg:text-2xl font-bold my-1
+}
+
+.card-subtitle {
+    @apply text-xs xl:text-sm text-slate-500 border-b-2 italic border-b-slate-700
+}
+
+.card-content {
+    @apply text-slate-200 text-sm my-2
+}
+
+.token {
+    float: left;
+    opacity: 0;
+    transition: all 1s ease-in;
+}
+.token.visible {
+    opacity: 1;
+}
