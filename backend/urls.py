@@ -8,14 +8,13 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
+    path('api/process-video/', views.process_video, name="process_video"),
     path('api/upload-video/', views.upload_video, name="upload_video"),
-    path('api/get-video/', views.get_video, name="get_video"),
 ]
 
 if not settings.DEBUG:
     urlpatterns += [
         path('', TemplateView.as_view(template_name='index.html')),
     ]
-
-if settings.DEBUG:
+else:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

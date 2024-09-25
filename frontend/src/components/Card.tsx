@@ -14,7 +14,7 @@ interface Props {
 
 const Card = ({ title, media, subtitle, isGradual, className }: Props) => {
   const [index, setIndex] = useState(0);
-  const { videoUrl, transcript } = useVideo();
+  const { transcript } = useVideo();
   const contentAsArray = transcript ? transcript.split(" ") : [];
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Card = ({ title, media, subtitle, isGradual, className }: Props) => {
   });
 
   return (
-    <div className={"card-wrapper " + className + (videoUrl ? "" : " hide")}>
+    <div className={"card-wrapper " + className + (transcript ? "" : " hide")}>
       <div className="card-title">{title}</div>
       <div className="card-subtitle">{subtitle}</div>
       <div className="card-content">

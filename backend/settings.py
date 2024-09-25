@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'backend'
 ]
 
 MIDDLEWARE = [
@@ -114,9 +115,6 @@ STATICFILES_DIRS = [
     BASE_DIR / 'frontend/dist/assets',
 ]
 
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Default primary key field type
@@ -133,3 +131,16 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SECURE = False
 
 CSRF_USE_SESSIONS = False  # Use a separate cookie instead of session for CSRF
+
+
+# Azure Blob Storage Settings
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+AZURE_ACCOUNT_NAME = 'hub17610921168'
+AZURE_ACCOUNT_KEY = 'CASOXObgv/Qksm76gp2ps0kBvzZ910pKuYi2j0RILLdQjSKHMr0/I+PcE7NqWZKaM9VlphaKfGz2+AStAvJImg=='
+AZURE_CONTAINER = 'hackathon'
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+
+# Set the URL where your media files will be accessible
+MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+
+MEDIA_ROOT = BASE_DIR / 'media'

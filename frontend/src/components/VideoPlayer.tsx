@@ -6,7 +6,7 @@ import "../assets/clean/player.css";
 const VideoPlayer = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const { videoUrl, setVideoUrl, setTranscript } = useVideo();
+  const { videoUrl, setTranscript } = useVideo();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -22,7 +22,7 @@ const VideoPlayer = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append("video", selectedFile);
-    await fetch("api/upload-video/", {
+    await fetch("api/process-video/", {
       method: "POST",
       body: formData,
       headers: {
@@ -36,15 +36,20 @@ const VideoPlayer = () => {
         }
       });
 
-    await fetch("/api/get-video/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          setLoading(false);
-          setVideoUrl(data.url);
-        }
-      })
-      .catch((error) => console.error("Error fetching video:", error));
+    // await fetch("api/upload-video/", {
+    //   method: "POST",
+    //   body: formData,
+    //   headers: {
+    //     "X-CSRFToken": getCSRFToken(),
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     if (data) {
+    //       setLoading(false);
+    //       setVideoUrl(data.url);
+    //     }
+    //   });
   };
 
   const getCSRFToken = () => {
