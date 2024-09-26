@@ -1,0 +1,77 @@
+.card-wrapper {
+    opacity: 1;
+    max-width: 38vw;
+    transition: all 0.7s ease-in;
+    @apply overflow-hidden
+    text-white border-4 rounded-lg border-slate-600
+    p-4 flex flex-col my-2 mx-auto
+}
+.card-wrapper.s{
+    width: 80%;
+}
+.card-wrapper.m {
+    width: 90%;
+}
+.card-wrapper.l {
+    width: 100%;
+}
+
+
+.card-wrapper.filled {
+    @apply from-slate-900 via-slate-900 to-purple-900
+}
+.card-wrapper.fade {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in;
+}
+
+
+.card-wrapper.dir-tr {
+    @apply bg-gradient-to-tr
+}
+.card-wrapper.dir-t {
+    @apply bg-gradient-to-t
+}
+.card-wrapper.dir-tl {
+    @apply bg-gradient-to-tl
+}
+.card-wrapper.dir-bl {
+    @apply bg-gradient-to-bl
+}
+.card-wrapper.dir-b {
+    @apply bg-gradient-to-b
+}
+.card-wrapper.dir-br {
+    @apply bg-gradient-to-br
+}
+
+
+.card-title {
+    transition: all ease-in-out 0.5s 0.5s;
+    @apply text-nowrap text-slate-200 sm:text-sm md:text-xl lg:text-2xl font-bold my-1
+}
+.card-title.small {
+    @apply sm:text-sm lg:text-xl
+}
+
+.card-subtitle {
+    @apply text-xs xl:text-sm text-slate-500 border-b-2 italic border-b-slate-700
+}
+
+.card-content {
+    @apply text-slate-200 sm:text-xs md:text-sm lg:text-lg py-1
+}
+.card-content.small {
+    @apply text-xs lg:text-sm
+}
+
+
+.token {
+    float: left;
+    opacity: 0;
+    transition: all 1s ease-in;
+}
+.token.visible {
+    opacity: 1;
+}
