@@ -108,3 +108,18 @@ class AnalyzeAudio:
             quietness_dict[audio] = quiet_segments
 
         return loudness_dict, quietness_dict
+    
+    def overall_loudness(self) -> dict:
+        loudness_dict: dict = {}
+
+        for audio in os.listdir(self.audio_path):
+            print(f'Analyzing {audio}...')
+            y, sr = librosa.load(self.audio_path_trimmed + audio)
+
+            # Oblicz RMS i przekształć na dB
+            rms = np.sqrt(np.mean(y**2))
+            db = self.rms_to_db(rms)
+
+            loudness_dict[audio] = round(db, 1)
+
+        return loudness_dict
