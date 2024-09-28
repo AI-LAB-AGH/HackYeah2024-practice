@@ -1,11 +1,10 @@
-from ultralytics import YOLO
-
 import cv2
 import mediapipe as mp
 import numpy as np
 import os
 import time
 
+from ultralytics import YOLO
 from cv_utils import *
 
 
@@ -57,22 +56,37 @@ def count_people(frame) -> int:
     
     return person_count
 
+def detect_gestures(frame):
+    results = pose.process(frame)
+    gesture = False
+    height, width, _ = frame.shape
+
+    if results.pose_landmarks:
+        # Check if any arm is raised
+        gesture = is_any_arm_raised(results.pose_landmarks.landmark, height)
+    
+    return gesture
+
 def classify_video_head_direction(video_path):
     frames = extract_frames(video_path, frame_interval=0.5)  # Adjust interval as needed
     preds = []
     for frame in frames:
         is_turned_away = None
         background_disturbance = False if count_people(frame) == 1 else True
+        gesture = None
         if not background_disturbance:
             landmarks = detect_faces_and_landmarks(frame)
             head_pose = estimate_head_pose(frame, landmarks)
             is_turned_away = is_turned(head_pose)
-        print(f'Turned away: {is_turned_away}, background disturbance: {background_disturbance}')
-        preds.append([background_disturbance, is_turned_away])
+            gesture = detect_gestures(frame)
+        print(f'Turned away: {is_turned_away}, background disturbance: {background_disturbance}, gesture: {gesture}')
+        # preds.append([background_disturbance, is_turned_away, gesture])
+        preds.append(gesture)
     return preds
 
-video_path = os.path.join('data', 'videos', 'HY_2024_film_08.mp4')
+video_path = os.path.join('data', 'videos', 'HY_2024_film_19.mp4')
 
 start = time.time()
-classify_video_head_direction(video_path)
+pred = classify_video_head_direction(video_path)
+print(pred)
 print(f'Total time: {time.time() - start}')

@@ -24,6 +24,66 @@ LANDMARKS_IDS = {
     'right_mouth_corner': 291
 }
 
+# Initialize MediaPipe Pose
+mp_pose = mp.solutions.pose
+pose = mp_pose.Pose(
+    static_image_mode=False,
+    model_complexity=1,  # 0, 1, or 2. Higher complexity for more accuracy.
+    min_detection_confidence=0.5,
+    min_tracking_confidence=0.5
+)
+mp_drawing = mp.solutions.drawing_utils
+
+def calculate_angle(a, b, c):
+    """
+    Calculates the angle at point 'b' given three points a, b, c.
+    Points are in [x, y] format.
+    """
+    a = np.array(a)
+    b = np.array(b)
+    c = np.array(c)
+    
+    ba = a - b
+    bc = c - b
+    
+    cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc) + 1e-6)
+    angle = np.arccos(np.clip(cosine_angle, -1.0, 1.0))
+    return np.degrees(angle)
+
+def is_any_arm_raised(landmarks, img_height, angle_thresh=120, y_ratio=0.5):
+    """
+    Determines if any arm (left or right) is raised.
+    
+    Parameters:
+    - landmarks: List of pose landmarks.
+    - img_height: Height of the image in pixels.
+    - angle_thresh: Maximum elbow angle to consider arm as raised.
+    - y_ratio: Fraction of image height to set Y-coordinate threshold.
+    
+    Returns:
+    - Boolean indicating if any arm is raised.
+    """
+    arms = ['left', 'right']
+    for side in arms:
+        shoulder = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value if side == 'left' else mp_pose.PoseLandmark.RIGHT_SHOULDER.value]
+        elbow = landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value if side == 'left' else mp_pose.PoseLandmark.RIGHT_ELBOW.value]
+        wrist = landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value if side == 'left' else mp_pose.PoseLandmark.RIGHT_WRIST.value]
+        
+        angle = calculate_angle([shoulder.x, shoulder.y], [elbow.x, elbow.y], [wrist.x, wrist.y])
+        wrist_y = wrist.y * img_height
+        
+        if (wrist_y < y_ratio * img_height) or (angle < angle_thresh):
+            return True
+    return False
+
+def normalize_landmarks(landmarks, width, height):
+    normalized = []
+    for lm in landmarks.landmark:
+        x = lm.x * width
+        y = lm.y * height
+        normalized.append([x, y])
+    return normalized
+
 def get_2d_image_points(landmarks, frame_shape):
     image_points = []
     height, width, _ = frame_shape
