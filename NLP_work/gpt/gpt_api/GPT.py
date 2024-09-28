@@ -1,14 +1,14 @@
 from openai import OpenAI
 import api_key
+from prompts import *
 
 client = OpenAI(api_key=api_key.get_api_key())
 MODEL = "gpt-4o"
 
 
-with open("transkrypt1.txt", 'r', encoding='utf-8') as file:
+with open("./../../../data/video-transcription-manually/TXT_HY_2024_film_08.txt", 'r', encoding='utf-8') as file:
     transcript = file.read()
 
-answers = {}
 
 def query_gpt(prompt):
     completion = client.chat.completions.create(
@@ -24,13 +24,22 @@ def query_gpt(prompt):
     answer = completion.choices[0].message.content
     return answer
 
-filler_words_prompt = ("Transcript which I provide at the end of this prompt may contain some filler words. The definition of filler"
-                       "word is: "
-                       "'Filler words are words such as \"um,\" \"ah,\" \"hmm,\" \"like,\" \"you know,\" and \"alright\" "
-                       "that are used to give the speaker time to think, express uncertainty or make something awkward feel less awkward, "
-                       "or as a verbal tick. Filler words are also known as vocal disfluencies or hesitations.' "
-                       "You have to find these filler words in the transcript. In your response, write only these filler words, one per line."
-                       f"Here is the transcript: {transcript}")
+
+answers = {
+    "filler_words": query_gpt(filler_word_prompt(transcript)),
+    "repeated_words": query_gpt(repetitions_prompt(transcript)),
+    "complex_words": query_gpt(complex_words_prompt(transcript)),
+    "jargon_words": query_gpt(jargon_words_prompt(transcript)),
+    "non-polish_words": query_gpt(non_polish_words_prompt(transcript)),
+    "non-existing_words": query_gpt(non_existing_words_prompt(transcript)),
+    "passive_voice": query_gpt(passive_voice_prompt_pl(transcript)),
+    "change_of_topic": query_gpt(unexpected_topic_change_prompt(transcript)),
+    "numbers": query_gpt(unusual_numbers_prompt(transcript))
+}
+
+for key in answers:
+    print(key, ":\n", answers[key])
+
 
 
 
