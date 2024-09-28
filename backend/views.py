@@ -5,12 +5,30 @@ from django.http import JsonResponse
 from moviepy.editor import VideoFileClip
 from django.shortcuts import render
 from django.middleware.csrf import get_token
-
+from django.http import FileResponse, HttpResponseNotFound
 
 def index(request):
     csrf_token = get_token(request)
     return render(request, 'index.html')
+
+
+def serve_temp_file(request):
+    temp_file_path = request.session['temp_file_path']
     
+    if os.path.exists(temp_file_path):
+        return FileResponse(open(temp_file_path, 'rb'), content_type='video/mp4')
+    else:
+        return HttpResponseNotFound('File not found')
+    
+
+def delete_video(request):
+    temp_file_path = request.session['temp_file_path']
+    
+    if os.path.exists(temp_file_path):
+        os.remove(temp_file_path)
+    else:
+        return HttpResponseNotFound('File not found')
+
 
 def process_video(request):
     if request.method == 'POST' and request.FILES.get('video'):
@@ -18,6 +36,7 @@ def process_video(request):
 
         temp_dir = tempfile.gettempdir()
         temp_file_path = os.path.join(temp_dir, video.name)
+        request.session['temp_file_path'] = temp_file_path
 
         with open(temp_file_path, 'wb+') as temp_file:
             for chunk in video.chunks():
@@ -26,20 +45,8 @@ def process_video(request):
         audio_path = mp4_to_wav(temp_file_path)
         transcript = speech_to_text(audio_path)
 
-        os.remove(temp_file_path)
 
-        return JsonResponse( { "transcript": transcript }, status=201)
-
-    return JsonResponse({'error': 'No video file uploaded'}, status=400)
-
-
-def upload_video(request):
-    if request.method == 'POST' and request.FILES.get('video'):
-        video = request.FILES['video']
-        blob_service_client = BlobServiceClient.from_connection_string("DefaultEndpointsProtocol=https;AccountName=hub17610921168;AccountKey=CASOXObgv/Qksm76gp2ps0kBvzZ910pKuYi2j0RILLdQjSKHMr0/I+PcE7NqWZKaM9VlphaKfGz2+AStAvJImg==;EndpointSuffix=core.windows.net")
-        blob_client = blob_service_client.get_blob_client(container='hackathon', blob=video.name)
-        blob_client.upload_blob(video.read(), overwrite=True)
-        return JsonResponse( { "url": "url" }, status=201)
+        return JsonResponse( { "transcript": transcript, "url": temp_file_path }, status=201)
 
     return JsonResponse({'error': 'No video file uploaded'}, status=400)
 
