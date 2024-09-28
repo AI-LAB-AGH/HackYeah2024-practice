@@ -59,13 +59,17 @@ def count_people(frame) -> int:
 
 def classify_video_head_direction(video_path):
     frames = extract_frames(video_path, frame_interval=0.5)  # Adjust interval as needed
+    preds = []
     for frame in frames:
-        landmarks = detect_faces_and_landmarks(frame)
-        head_pose = estimate_head_pose(frame, landmarks)
-        classification = None
-        if head_pose:
-            classification = is_turned(head_pose)
-        print(f'Turned away: {classification}, background disturbance: {False if count_people(frame) == 1 else True}')
+        is_turned_away = None
+        background_disturbance = False if count_people(frame) == 1 else True
+        if not background_disturbance:
+            landmarks = detect_faces_and_landmarks(frame)
+            head_pose = estimate_head_pose(frame, landmarks)
+            is_turned_away = is_turned(head_pose)
+        print(f'Turned away: {is_turned_away}, background disturbance: {background_disturbance}')
+        preds.append([background_disturbance, is_turned_away])
+    return preds
 
 video_path = os.path.join('data', 'videos', 'HY_2024_film_08.mp4')
 
