@@ -4,17 +4,18 @@ import os
 import moviepy.editor as mp
 import json
 
+
 class SpeechToText:
     def __init__(self) -> None:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = whisper.load_model("large", device = self.device)
+        self.model = whisper.load_model("large", device=self.device)
         self.path = "E:/Python/Projects/HackYeah2024-practice/NLP_work/videos"
         self.audio_folder = "E:/Python/Projects/HackYeah2024-practice/NLP_work/audio_folder"
         self.transcripts_path = "E:/Python/Projects/HackYeah2024-practice/NLP_work/transcripts"
 
     def __repr__(self) -> str:
         return "Class to load model from whisper_timestamped"
-    
+
     def convert_audio(self) -> None:
         mp4_paths_list: list = []
         for root, dirs, files in os.walk(self.path):
@@ -37,13 +38,14 @@ class SpeechToText:
                 if file.endswith(".wav"):
                     prefix = file.split(".")[0]
                     print(f"Transcribing {file}")
-                    audio = whisper.load_audio("E:/Python/Projects/HackYeah2024-practice/NLP_work/audio_folder/HY_2024_film_04.wav")
-                    result = whisper.transcribe(self.model, audio = audio, language = "pl", vad = "auditok")
+                    audio = whisper.load_audio(
+                        "E:/Python/Projects/HackYeah2024-practice/NLP_work/audio_folder/HY_2024_film_04.wav")
+                    result = whisper.transcribe(self.model, audio=audio, language="pl", vad="auditok")
 
                     with open(f"{self.path}/{prefix}.json", "w") as f:
-                        json.dump(result, f, ensure_ascii = False)
+                        json.dump(result, f, ensure_ascii=False)
 
                     # get some text and save it to .txt file
                     text = result["text"]
-                    with open(f"{self.path}/{prefix}.txt", "w") as f:
+                    with open(f"{self.transcripts_path}/{prefix}.txt", "w+") as f:
                         f.write(text)
