@@ -138,3 +138,26 @@ def unusual_numbers_prompt_pl(statement):
             "W odpowiedzi wypisz tylko liczby, każda w nowej linii. "
             "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
             f"Oto oświadczenie: <TEXT> {statement} <\\TEXT>")
+
+def target_group_prompt(statement):
+    return ("The statement I provide at the end of this prompt may be aimed at a specific target group of people. "
+            "Based on the content, tone, language, and any implicit or explicit information within the statement, "
+            "your task is to describe the likely target audience. Consider factors such as age, profession, interests, education level, or any other relevant characteristics. "
+            "In your response, provide a clear description of the target group. Write it in polish."
+            f"Here is the statement: <TEXT> {statement} <\\TEXT>")
+
+def valid_questions_prompt(statement):
+    return ("The statement I provide at the end of this prompt may contain various details, claims, or pieces of information. "
+            "Your task is to generate 10 valid and relevant questions about the statement. These questions should explore its content, context, assumptions, and implications. "
+            "Consider aspects like the clarity, purpose, evidence, or any potential gaps in the statement. "
+            "In your response, provide 10 distinct questions that could be asked about the statement. Write it in polish."
+            "There should be one question per line, line by line."
+            f"Here is the statement: <TEXT> {statement} <\\TEXT>")
+
+def important_phrases_prompt(statement):
+    return ("The statement I provide at the end of this prompt contains several key ideas or important phrases. "
+            "Your task is to identify and cite the most significant phrases within the statement. "
+            "These phrases should reflect the main points, arguments, or themes presented. "
+            "In your response, list the important phrases along with their context in the statement. Write it in polish."
+            "There should be one citation per line, line by line. "
+            f"Here is the statement: <TEXT> {statement} <\\TEXT>")
