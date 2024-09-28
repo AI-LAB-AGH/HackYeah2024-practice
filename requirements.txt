@@ -34,6 +34,7 @@ moviepy==1.0.3
 msrest==0.7.1
 numpy==2.1.1
 oauthlib==3.2.2
+openai==1.50.2
 opencv-contrib-python==4.10.0.84
 opencv-python==4.10.0.84
 opt-einsum==3.3.0
