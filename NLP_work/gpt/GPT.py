@@ -1,6 +1,6 @@
 from openai import OpenAI
-from . import api_key
-from .prompts import *
+import api_key
+from prompts import *
 
 CLIENT = OpenAI(api_key=api_key.get_api_key())
 MODEL = "gpt-4o"
