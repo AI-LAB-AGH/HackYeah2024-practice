@@ -22,10 +22,13 @@ class GPT:
             "target_group": self.query_gpt(target_group_prompt(transcript)),
             "questions": self.query_gpt(valid_questions_prompt(transcript)),
             "important_phrases": self.query_gpt(important_phrases_prompt(transcript))
-
-
-
         }
+
+    def clean_transcript(self, transcript):
+        return self.query_gpt("Podziel tekst podany na końcu tej wiadomości na zdania oraz dodaj wielkie litery na początku zdań. "
+                              "Nie zwracaj w odpowiedzi nic oprócz poprawionego tekstu."
+                              f"Oto tekst: <TEXT> \"{transcript}\" <\\TEXT>")
+
     def query_gpt(self, prompt):
         completion = CLIENT.chat.completions.create(
             model=MODEL,
