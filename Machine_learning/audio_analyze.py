@@ -17,7 +17,7 @@ class AnalyzeAudio:
     def get_tempo(self) -> dict:
         tempo_dict: dict = {}
 
-        for audio in os.listdir(self.audio_path):
+        for audio in os.listdir(self.audio_path_trimmed):
             print(f'Analyzing {audio}...')
             y, sr = librosa.load(self.audio_path_trimmed + audio)
             onset_env = librosa.onset.onset_strength(y = y, sr = sr)
@@ -37,7 +37,7 @@ class AnalyzeAudio:
     def too_long_pause(self, min_pause_duration: float = None) -> dict:
         pause_dict: dict = {}
 
-        for audio in os.listdir(self.audio_path):
+        for audio in os.listdir(self.audio_path_trimmed):
             print(f'Analyzing {audio}...')
             y, sr = librosa.load(self.audio_path_trimmed + audio)
             non_silent_intervals = librosa.effects.split(y, top_db=30)
@@ -69,7 +69,7 @@ class AnalyzeAudio:
         # Długość segmentu w sekundach
         segment_length = 0.5  
 
-        for audio in os.listdir(self.audio_path):
+        for audio in os.listdir(self.audio_path_trimmed):
             print(f'Analyzing {audio}...')
             y, sr = librosa.load(self.audio_path_trimmed + audio)
 
@@ -112,7 +112,7 @@ class AnalyzeAudio:
     def overall_loudness(self) -> dict:
         loudness_dict: dict = {}
 
-        for audio in os.listdir(self.audio_path):
+        for audio in os.listdir(self.audio_path_trimmed):
             print(f'Analyzing {audio}...')
             y, sr = librosa.load(self.audio_path_trimmed + audio)
 
