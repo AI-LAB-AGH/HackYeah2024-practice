@@ -7,6 +7,7 @@ def filler_word_prompt(transcript):
                        "or as a verbal tick. Filler words are also known as vocal disfluencies or hesitations.' "
                        "You have to find these filler words in the transcript. In your response, write only these filler words, one per line."
                        "If there aren't any issues like that, return only word  \"brak\" ."
+                       "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
                        f"Here is the transcript: <TEXT> {transcript} <\\TEXT>")
 
 def filler_word_prompt_pl(transcript):
@@ -16,6 +17,7 @@ def filler_word_prompt_pl(transcript):
                        "wyrażenie niepewności lub sprawienie, by coś niezręcznego było mniej niezręczne, albo jako werbalny tik. "
                        "Słowa wypełniacze są również znane jako werbalne zacięcia lub wahania.' "
                        "Musisz znaleźć te słowa wypełniacze w transkrypcji. W odpowiedzi napisz tylko te słowa wypełniacze, jedno na linię."
+                       "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
                        f"Oto transkrypcja: <TEXT> {transcript} <\\TEXT>")
 
 def repetitions_prompt(transcript):
@@ -29,6 +31,7 @@ def repetitions_prompt_pl(transcript):
     return ("Transkrypcja, którą podaję na końcu tego polecenia, może zawierać powtórzone słowa lub frazy. "
                          "Powtórzenie może wystąpić, gdy mówca mówi to samo słowo lub frazę wielokrotnie, bezpośrednio po sobie lub w krótkich odstępach czasu. "
                          "Musisz znaleźć te powtórzone słowa lub frazy w transkrypcji. W odpowiedzi napisz tylko te powtórzone słowa lub frazy, jedno na linię. "
+                         "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
                          f"Oto transkrypcja: <TEKST> {transcript} <\\TEKST>")
 
 #POMYŚLEĆ NAD PRZYKŁADAMI
@@ -43,8 +46,9 @@ def complex_words_prompt(transcript):
 def complex_words_prompt_pl(transcript):
     return ("Transkrypcja, którą podaję na końcu tego polecenia, może zawierać bardzo skomplikowane lub trudne słowa. "
             "Są to słowa rzadko używane, specjalistyczne lub trudne do zrozumienia dla przeciętnego odbiorcy. "
-            "Na przykład: 'antyestablishmentaryzm', 'kwintesencja', 'kontrast'. "
+            "Na przykład: 'antyestablishmentaryzm', 'kwintesencja', 'transcendencja'. "
             "Twoim zadaniem jest zidentyfikowanie takich słów w transkrypcji. W odpowiedzi wypisz tylko trudne słowa, każde w nowej linii. "
+            "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
             f"Oto transkrypcja: <TEXT> {transcript} <\\TEXT>")
 
 def jargon_words_prompt(transcript):
@@ -60,6 +64,7 @@ def jargon_words_prompt_pl(transcript):
             "Są to słowa lub frazy używane w określonych zawodach, dziedzinach lub branżach, które mogą być trudne do zrozumienia dla ogólnej publiczności. "
             "Na przykład: 'synergia', 'blockchain', 'splątanie kwantowe'. "
             "Twoim zadaniem jest zidentyfikowanie takich żargonowych słów w transkrypcji. W odpowiedzi wypisz tylko słowa żargonowe, każde w nowej linii. "
+            "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
             f"Oto transkrypcja: <TEXT> {transcript} <\\TEXT>")
 
 def non_polish_words_prompt(transcript):
@@ -75,6 +80,7 @@ def non_polish_words_prompt_pl(transcript):
             "Twoim zadaniem jest zidentyfikowanie takich słów, które nie są w języku polskim. "
             "Na przykład: 'business', 'feedback', 'artificial intelligence'. "
             "W odpowiedzi wypisz tylko te niepolskie słowa, każde w nowej linii. "
+            "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
             f"Oto transkrypcja: <TEXT> {transcript} <\\TEXT>")
 
 def non_existing_words_prompt(transcript):
@@ -90,6 +96,7 @@ def non_existing_words_prompt_pl(transcript):
             "Są to słowa, które nie występują w standardowych słownikach lub nie są uznawane za prawidłowe słowa. "
             "Na przykład: 'flibbertigibbet', 'snollygoster', 'glabberflabber'. "
             "Twoim zadaniem jest zidentyfikowanie takich nieistniejących słów w transkrypcji. W odpowiedzi wypisz tylko nieistniejące słowa, każde w nowej linii. "
+            "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
             f"Oto transkrypcja: <TEXT> {transcript} <\\TEXT>")
 
 def passive_voice_prompt_pl(transcript):
@@ -113,6 +120,7 @@ def unexpected_topic_change_prompt_pl(transcript):
             "Nieoczekiwana zmiana tematu występuje, gdy mówca przechodzi do nowego zagadnienia, które jest niepowiązane z poprzednim. "
             "Twoim zadaniem jest zidentyfikowanie pierwszego słowa każdego nowego tematu w transkrypcji. "
             "W odpowiedzi wypisz tylko pierwsze słowa każdego nowego tematu, każde w nowej linii. "
+            "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
             f"Oto transkrypcja: <TEXT> {transcript} <\\TEXT>")
 
 def unusual_numbers_prompt(statement):
@@ -128,4 +136,5 @@ def unusual_numbers_prompt_pl(statement):
             "Nadmiar liczb może obejmować dane statystyczne, procenty lub jakiekolwiek informacje numeryczne, które mogą zmylić lub przytłoczyć widza. "
             "Twoim zadaniem jest zidentyfikowanie i wypisanie liczb obecnych w oświadczeniu. "
             "W odpowiedzi wypisz tylko liczby, każda w nowej linii. "
+            "Jeśli nie ma takich fragmentów tekstu, zwróć tylko słowo  \"brak\" ."
             f"Oto oświadczenie: <TEXT> {statement} <\\TEXT>")
