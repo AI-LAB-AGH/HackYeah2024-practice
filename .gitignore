@@ -103,3 +103,6 @@ Desktop.ini
 
 # npm
 node_modules/
+
+#venv
+venv
