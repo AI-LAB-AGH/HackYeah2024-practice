@@ -3,6 +3,8 @@ from ultralytics import YOLO
 import cv2
 import mediapipe as mp
 import numpy as np
+import os
+import time
 
 from cv_utils import *
 
@@ -55,3 +57,18 @@ def count_people(frame) -> int:
     
     return person_count
 
+def classify_video_head_direction(video_path):
+    frames = extract_frames(video_path, frame_interval=0.5)  # Adjust interval as needed
+    for frame in frames:
+        landmarks = detect_faces_and_landmarks(frame)
+        head_pose = estimate_head_pose(frame, landmarks)
+        classification = None
+        if head_pose:
+            classification = is_turned(head_pose)
+        print(f'Turned away: {classification}, background disturbance: {False if count_people(frame) == 1 else True}')
+
+video_path = os.path.join('data', 'videos', 'HY_2024_film_08.mp4')
+
+start = time.time()
+classify_video_head_direction(video_path)
+print(f'Total time: {time.time() - start}')

@@ -66,18 +66,14 @@ def estimate_head_pose(frame, landmarks):
     roll = euler_angles[2][0]
     return (yaw, pitch, roll)
 
-def detect_faces_and_landmarks(frames):
-    face_landmarks = []
+def detect_faces_and_landmarks(frame):
     with mp_face_mesh.FaceMesh(static_image_mode=True,
                                max_num_faces=1,
                                refine_landmarks=True,
                                min_detection_confidence=0.5) as face_mesh:
-        for frame in frames:
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            results = face_mesh.process(rgb_frame)
-            if results.multi_face_landmarks:
-                landmarks = results.multi_face_landmarks[0]
-                face_landmarks.append(landmarks)
-            else:
-                face_landmarks.append(None)
-    return face_landmarks
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = face_mesh.process(rgb_frame)
+        if results.multi_face_landmarks:
+            landmarks = results.multi_face_landmarks[0]
+            return landmarks
+        return None
