@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+gpt/gpt_api/api_key.py
+
 # C extensions
 *.so
 
