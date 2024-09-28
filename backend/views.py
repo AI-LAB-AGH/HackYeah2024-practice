@@ -1,4 +1,5 @@
 import os
+import json
 import tempfile
 import speech_recognition as sr
 from django.http import JsonResponse
@@ -69,3 +70,24 @@ def speech_to_text(file_path):
 
         except:
             return "Nie rozpoznano"
+        
+
+def write_to_temp_json_file():
+    data = [{"timestamp": 3.12, "type": 1},
+    {"timestamp": 6.12, "type": 2},
+    {"timestamp": 9.12, "type": 0},
+    {"timestamp": 12.12, "type": 0},
+    {"timestamp": 15.12, "type": 2},]
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as temp_file:
+        json.dump(data, temp_file)
+        return temp_file.name
+
+
+def serve_temp_json_data(request):
+    temp_file_path = write_to_temp_json_file()
+    
+    with open(temp_file_path, 'r') as json_file:
+        json_data = json.load(json_file)
+
+    return JsonResponse(json_data, safe=False) 

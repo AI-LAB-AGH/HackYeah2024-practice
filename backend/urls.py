@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/process-video/', views.process_video, name="process_video"),
     path('api/get-video/', views.serve_temp_file, name='get_video'),
     path('api/delete-video/', views.delete_video, name='delete_video'),
+    path('api/get-json-data/', views.serve_json_data, name='get-json-data'),
 ]
 
 if settings.DEBUG:
