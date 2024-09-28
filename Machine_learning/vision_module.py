@@ -23,8 +23,13 @@ def extract_frames(video_path, frame_interval=0.1):
         if not ret:
             break
         if count % interval == 0:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             frames.append(frame)
         count += 1
+
+    # for image in frames:  
+    #     cv2.imshow("frame", image)
+    #     cv2.waitKey(500)
 
     cap.release()
     return frames
@@ -56,19 +61,8 @@ def count_people(frame) -> int:
     
     return person_count
 
-def detect_gestures(frame):
-    results = pose.process(frame)
-    gesture = False
-    height, width, _ = frame.shape
-
-    if results.pose_landmarks:
-        # Check if any arm is raised
-        gesture = is_any_arm_raised(results.pose_landmarks.landmark, height)
-    
-    return gesture
-
 def classify_video_head_direction(video_path):
-    frames = extract_frames(video_path, frame_interval=0.5)  # Adjust interval as needed
+    frames = extract_frames(video_path, frame_interval=1.0)  # Adjust interval as needed
     preds = []
     for frame in frames:
         is_turned_away = None

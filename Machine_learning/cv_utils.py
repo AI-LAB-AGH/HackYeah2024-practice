@@ -69,12 +69,24 @@ def is_any_arm_raised(landmarks, img_height, angle_thresh=120, y_ratio=0.5):
         elbow = landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value if side == 'left' else mp_pose.PoseLandmark.RIGHT_ELBOW.value]
         wrist = landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value if side == 'left' else mp_pose.PoseLandmark.RIGHT_WRIST.value]
         
-        angle = calculate_angle([shoulder.x, shoulder.y], [elbow.x, elbow.y], [wrist.x, wrist.y])
-        wrist_y = wrist.y * img_height
-        
-        if (wrist_y < y_ratio * img_height) or (angle < angle_thresh):
-            return True
+        if shoulder and elbow and wrist:
+            angle = calculate_angle([shoulder.x, shoulder.y], [elbow.x, elbow.y], [wrist.x, wrist.y])
+            wrist_y = wrist.y * img_height
+            
+            if angle < angle_thresh:
+                return True
     return False
+
+def detect_gestures(frame):
+    results = pose.process(frame)
+    gesture = False
+    height, width, _ = frame.shape
+
+    if results.pose_landmarks:
+        # Check if any arm is raised
+        gesture = is_any_arm_raised(results.pose_landmarks.landmark, height)
+    
+    return gesture
 
 def normalize_landmarks(landmarks, width, height):
     normalized = []
