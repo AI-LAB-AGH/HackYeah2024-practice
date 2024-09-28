@@ -6,7 +6,7 @@ client = OpenAI(api_key=api_key.get_api_key())
 MODEL = "gpt-4o"
 
 
-with open("./../../../data/video-transcription-manually/TXT_HY_2024_film_08.txt", 'r', encoding='utf-8') as file:
+with open("./../../../data/video-transcription-manually/TXT_HY_2024_film_05.txt", 'r', encoding='utf-8') as file:
     transcript = file.read()
 
 
@@ -28,8 +28,8 @@ def query_gpt(prompt):
 answers = {
     "filler_words": query_gpt(filler_word_prompt(transcript)),
     "repeated_words": query_gpt(repetitions_prompt(transcript)),
-    "complex_words": query_gpt(complex_words_prompt(transcript)),
-    "jargon_words": query_gpt(jargon_words_prompt(transcript)),
+    "complex_words": query_gpt(complex_words_prompt_pl(transcript)),
+    "jargon_words": query_gpt(jargon_words_prompt_pl(transcript)),
     "non-polish_words": query_gpt(non_polish_words_prompt(transcript)),
     "non-existing_words": query_gpt(non_existing_words_prompt(transcript)),
     "passive_voice": query_gpt(passive_voice_prompt_pl(transcript)),
