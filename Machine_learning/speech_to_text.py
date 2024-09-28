@@ -7,7 +7,7 @@ import json
 class SpeechToText:
     def __init__(self) -> None:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = whisper.load_model("small", device = self.device)
+        self.model = whisper.load_model("large", device = self.device)
         self.path = "Machine_learning/wetransfer_hackyeah-2024-breakwordtraps_2024-09-28_0449"
         self.audio_folder = "Machine_learning/audio_folder"
 
