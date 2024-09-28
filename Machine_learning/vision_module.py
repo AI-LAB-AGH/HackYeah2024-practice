@@ -4,65 +4,11 @@ import numpy as np
 import os
 import time
 
-from ultralytics import YOLO
 from cv_utils import *
 
 
-mp_face_detection = mp.solutions.face_detection
-mp_face_mesh = mp.solutions.face_mesh
-
-def extract_frames(video_path, frame_interval=0.1):
-    cap = cv2.VideoCapture(video_path)
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    interval = int(fps * frame_interval)
-    frames = []
-    count = 0
-
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
-        if count % interval == 0:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frames.append(frame)
-        count += 1
-
-    # for image in frames:  
-    #     cv2.imshow("frame", image)
-    #     cv2.waitKey(500)
-
-    cap.release()
-    return frames
-
-def is_turned(pose, yaw_threshold=30):
-    yaw, pitch, roll = pose
-    if abs(yaw) < yaw_threshold:
-        return False
-    return True
-
-def count_people(frame) -> int:
-    # Initialize the YOLO model
-    # This will automatically download the YOLOv8 model if not present
-    model = YOLO('yolov8n.pt')  # 'yolov8n.pt' is the Nano version; for better accuracy, consider 'yolov8s.pt' or higher
-
-    results = model(frame)[0]
-
-    # Extract bounding boxes, class IDs, and confidences
-    boxes = results.boxes  # Boxes object for YOLOv8
-    person_count = 0
-
-    for box in boxes:
-        cls = box.cls  # Class ID
-        conf = box.conf  # Confidence score
-
-        # YOLOv8 uses class IDs as integers; '0' is typically 'person' in COCO
-        if int(cls) == 0 and conf > 0.5:  # Filter for 'person' class with confidence > 0.5
-            person_count += 1
-    
-    return person_count
-
-def classify_video_head_direction(video_path):
-    frames = extract_frames(video_path, frame_interval=1.0)  # Adjust interval as needed
+def detect_vision_anomalies(video_path, frame_interval=1.0):
+    frames = extract_frames(video_path, frame_interval=frame_interval)  # Adjust interval as needed
     preds = []
     for frame in frames:
         is_turned_away = None
@@ -74,13 +20,30 @@ def classify_video_head_direction(video_path):
             is_turned_away = is_turned(head_pose)
             gesture = detect_gestures(frame)
         print(f'Turned away: {is_turned_away}, background disturbance: {background_disturbance}, gesture: {gesture}')
-        # preds.append([background_disturbance, is_turned_away, gesture])
-        preds.append(gesture)
+        preds.append([background_disturbance, is_turned_away, gesture])
     return preds
+
+def get_vision_anomaly_timestamps(video_path, frame_interval=0.5):
+    preds = detect_vision_anomalies(video_path, frame_interval)
+
+    anomalies = []
+
+    # extracting timestamps
+    for anomaly_type in preds:
+        timestamps = []
+        for i in range(len(anomaly_type)):
+            if anomaly_type[i] == None:
+                continue
+            if anomaly_type[i] == True:
+                if len(timestamps) == 0 or len(timestamps[-1]) == 2:
+                    timestamps.append()
+
+        anomalies.append(timestamps)
+
 
 video_path = os.path.join('data', 'videos', 'HY_2024_film_19.mp4')
 
 start = time.time()
-pred = classify_video_head_direction(video_path)
+pred = detect_vision_anomalies(video_path)
 print(pred)
 print(f'Total time: {time.time() - start}')
