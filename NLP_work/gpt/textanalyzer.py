@@ -317,6 +317,23 @@ class TextAnalyzer:
         
         return bierne_czasowniki
 
+    def number_analysis_spacy(self, zdanie):
+        doc = nlp(zdanie)
+        liczby = []
+
+        for token in doc:
+            if token.pos_ == "NUM":
+                liczby.append(token.text)
+
+        if len(zdanie.split()) == 0:
+            return "brak"
+
+        if len(liczby)/len(zdanie.split()) >= 0.1:
+            return "\n".join(liczby)
+        else:
+            return "brak"
+
+
 
 
     # zdanie = "Zostało podjęte działanie, które miało poprawić sytuację. Reformy zostały wdrożone przez ministerstwo."
@@ -324,3 +341,4 @@ class TextAnalyzer:
     # bierne_czasowniki = wykryj_strone_bierna(zdanie)
 
     # print("Czasowniki w stronie biernej:", bierne_czasowniki)
+

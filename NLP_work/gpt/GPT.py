@@ -16,11 +16,11 @@ class GPT:
             "complex_words": textanalyzer.TextAnalyzer().complex_word_searcher(transcript),
             "complex_sentences": textanalyzer.TextAnalyzer().complex_sentence_searcher(transcript),
             "jargon_words": textanalyzer.TextAnalyzer().jargon_searcher(transcript),
-            "non-polish_words": self.query_gpt(prompts.non_polish_words_prompt(transcript)),
+            "non-polish_words": textanalyzer.TextAnalyzer().foreign_word_searcher(transcript),
             "non-existing_words": self.query_gpt(prompts.non_existing_words_prompt(transcript)),
             "passive_voice": textanalyzer.TextAnalyzer().passive_form_verifier_spacy(transcript),
             "change_of_topic": self.query_gpt(prompts.unexpected_topic_change_prompt(transcript)),
-            "numbers": self.query_gpt(prompts.unusual_numbers_prompt(transcript)),
+            "numbers": textanalyzer.TextAnalyzer().number_analysis_spacy(transcript),
             "target_group": self.query_gpt(prompts.target_group_prompt(transcript)),
             "questions": self.query_gpt(prompts.valid_questions_prompt(transcript)),
             "important_phrases": textanalyzer.TextAnalyzer().important_phrases_searcher(transcript)
