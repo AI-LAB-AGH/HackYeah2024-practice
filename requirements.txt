@@ -117,3 +117,5 @@ ultralytics-thop==2.0.8
 easyocr==1.7.2
 #torchaudio==2.4.0
 transformers==4.45.1
+textstat==0.7.4
+spacy==3.7.6
