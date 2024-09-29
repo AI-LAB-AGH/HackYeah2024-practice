@@ -1,6 +1,10 @@
 from openai import OpenAI
+
+from . import prompts
 from . import api_key
-from .prompts import *
+from . import textanalyzer
+from . import topic_change_searcher
+
 
 CLIENT = OpenAI(api_key=api_key.get_api_key())
 MODEL = "gpt-4o"
@@ -10,18 +14,19 @@ class GPT:
 
     def get_tasks_results(self, transcript):
         return {
-            "filler_words": self.query_gpt(filler_word_prompt(transcript)),
-            "repeated_words": self.query_gpt(repetitions_prompt(transcript)),
-            "complex_words": self.query_gpt(complex_words_prompt_pl(transcript)),
-            "jargon_words": self.query_gpt(jargon_words_prompt_pl(transcript)),
-            "non-polish_words": self.query_gpt(non_polish_words_prompt(transcript)),
-            "non-existing_words": self.query_gpt(non_existing_words_prompt(transcript)),
-            "passive_voice": self.query_gpt(passive_voice_prompt_pl(transcript)),
-            "change_of_topic": self.query_gpt(unexpected_topic_change_prompt(transcript)),
-            "numbers": self.query_gpt(unusual_numbers_prompt(transcript)),
-            "target_group": self.query_gpt(target_group_prompt(transcript)),
-            "questions": self.query_gpt(valid_questions_prompt(transcript)),
-            "important_phrases": self.query_gpt(important_phrases_prompt(transcript))
+            "filler_words": self.query_gpt(prompts.filler_word_prompt(transcript)),
+            "repeated_words": textanalyzer.TextAnalyzer().repetition_searcher(transcript),
+            "complex_words": textanalyzer.TextAnalyzer().complex_word_searcher(transcript),
+            "complex_sentences": textanalyzer.TextAnalyzer().complex_sentence_searcher_simple(transcript),
+            "jargon_words": textanalyzer.TextAnalyzer().jargon_searcher(transcript),
+            "non-polish_words": textanalyzer.TextAnalyzer().foreign_word_searcher(transcript),
+            "non-existing_words": textanalyzer.TextAnalyzer().non_existent_word_searcher(transcript),
+            "passive_voice": textanalyzer.TextAnalyzer().passive_form_verifier_spacy(transcript),
+            "change_of_topic": topic_change_searcher.Topic_change_searcher(transcript).predict(),
+            "numbers": textanalyzer.TextAnalyzer().number_analysis_spacy(transcript),
+            "target_group": self.query_gpt(prompts.target_group_prompt(transcript)),
+            "questions": self.query_gpt(prompts.valid_questions_prompt(transcript)),
+            "important_phrases": textanalyzer.TextAnalyzer().important_fragments_searcher(transcript)
         }
 
     def clean_transcript(self, transcript):
