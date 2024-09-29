@@ -1,15 +1,14 @@
-import whisper_timestamped as whisper
-import torch
 import os
-import moviepy.editor as mp
 import json
-import tempfile
-from openai import AzureOpenAI
+import torch
+import librosa
+import soundfile as sf
+import moviepy.editor as mp
 import azure.cognitiveservices.speech as speechsdk
 
 
 class SpeechToText:
-    def __init__(self, video_path) -> None:
+    def __init__(self) -> None:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.key = "9cf400b6a7a3492c90b1ad0f6bd640f6"
         self.region = "westeurope"
@@ -23,6 +22,15 @@ class SpeechToText:
         with mp.VideoFileClip(video_path) as video:
             video.audio.write_audiofile(audio_path)
         return audio_path
+    
+
+    def trim_audio(self, audio_path) -> None:
+        y, sr = librosa.load(audio_path)
+        y_trimmed, _ = librosa.effects.trim(y)
+        
+        audio_path = audio_path.split(".")[0] + '_trim.wav'
+        sf.write(audio_path, y_trimmed, sr)
+        return audio_path
 
 
     def transcribe_wav(self, video_path) -> str:
@@ -32,20 +40,16 @@ class SpeechToText:
 
         audio_path = os.path.splitext(video_path)[0] + '.wav'
         with mp.VideoFileClip(video_path) as video:
-            video.audio.write_audiofile(audio_path, codec='pcm_s16le', bitrate="192k")
+            video.audio.write_audiofile(audio_path)
+
+        audio_path = self.trim_audio(audio_path)
 
         audio_input = speechsdk.AudioConfig(filename=audio_path)
-
-        # audio_path = self.convert_audio(video_path)
-
-        # audio_input = speechsdk.AudioConfig(filename=audio_path)
 
         speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_input)
         speech_config.output_format = speechsdk.OutputFormat.Detailed
 
         result = speech_recognizer.recognize_once()
-        text = result.text
-        print(text)
 
         prefix = audio_path.split(".")[0]
         if result.reason == speechsdk.ResultReason.RecognizedSpeech:
@@ -53,10 +57,10 @@ class SpeechToText:
             with open(f"{prefix}.json", "w") as f:
                 json.dump(detailed_result, f, ensure_ascii=False)
 
-            # print(detailed_result)
             nbest_result = detailed_result['NBest'][0]
             words = nbest_result['Words']
 
+            # words - array of dicts with the attributes: Word, Offset, Duration
             for word_info in words:
                 word = word_info['Word']
                 start_time = word_info['Offset'] / 10_000_000  # Convert from 100-nanosecond units to seconds
@@ -70,8 +74,4 @@ class SpeechToText:
             if cancellation_details.reason == speechsdk.CancellationReason.Error:
                 print(f"Error details: {cancellation_details.error_details}")
 
-        transcript_path = f"{prefix}_transcript.txt"
-        with open(transcript_path, "w+", encoding='utf-8') as f:
-            f.write(text)
-
-        return transcript_path
+        return detailed_result

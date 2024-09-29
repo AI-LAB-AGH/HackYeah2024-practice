@@ -42,6 +42,7 @@ const VideoPlayer = () => {
       .then((data) => {
         if (data) {
           setTranscript(data.transcript);
+          console.log(data.timestamps);
           fetch("api/get-video/").then(async (response) => {
             const videoBlob = await response.blob();
             const videoObjectUrl = URL.createObjectURL(videoBlob);
