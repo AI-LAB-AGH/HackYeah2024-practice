@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.box {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.white {
+  background-color: white;
+}
+
+.gray {
+  background-color: gray;
+}
+
+h1 {
+  font-size: 3rem;
+  color: black;
+}
+
+
+input[type="file"] {
+  display: block;
+  margin: 10px auto; /* Wyśrodkowanie */
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3; /* Ciemniejszy niebieski przy najechaniu */
+}
