@@ -1,14 +1,13 @@
 import torch
 from transformers import BertTokenizer, BertForNextSentencePrediction
-from NLP_work.gpt.GPT import GPT
+from . import GPT
 
 
 class Topic_change_searcher:
-    def __init__(self, path):
+    def __init__(self, transcript):
         self.tokenizer = BertTokenizer.from_pretrained('dkleczek/bert-base-polish-uncased-v1')
         self.model = BertForNextSentencePrediction.from_pretrained('dkleczek/bert-base-polish-uncased-v1')
-        with open(path, "r") as f:
-            self.transcript = f.read()
+        self.transcript = transcript
 
     def predict_next_sentence(self, sentence_a, sentence_b):
         encoding = self.tokenizer.encode_plus(sentence_a, sentence_b, return_tensors='pt')
@@ -21,7 +20,7 @@ class Topic_change_searcher:
 
     def predict(self):
         topic_changes = []
-        transcript = GPT().clean_transcript(self.transcript).strip()
+        transcript = GPT.GPT().clean_transcript(self.transcript).strip()
         sentences = transcript.split(".")
         sentences = [sentence for sentence in sentences if sentence]
         for i in range(len(sentences) - 1):
