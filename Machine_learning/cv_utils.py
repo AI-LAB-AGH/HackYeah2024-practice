@@ -177,8 +177,8 @@ def extract_frames(video_path, frame_interval=0.1):
     cap.release()
     return frames
 
-def is_turned(pose, yaw_threshold=30):
-    yaw, pitch, roll = pose
+def is_turned(pose_, yaw_threshold=30):
+    yaw, pitch, roll = pose_
     if abs(yaw) < yaw_threshold:
         return False
     return True
