@@ -75,7 +75,11 @@ def process_video(request):
         audio_path = mp4_to_wav(temp_file_path)
         analyze_audio = AnalyzeAudio(audio_path)
         analyze_audio.trim_audio(audio_path)
-        #analyze_audio.loudness_quietness()
+        loudness, quietness = analyze_audio.loudness_quietness()
+        pause = analyze_audio.too_long_pause()
+        video_timestamps.update(pause)
+        video_timestamps.update(loudness)
+        video_timestamps.update(quietness)
 
         return JsonResponse( { "transcript": pipeline.transcript,
                               "timestamps": pipeline.result['NBest'][0]['Words'],

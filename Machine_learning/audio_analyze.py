@@ -34,7 +34,7 @@ class AnalyzeAudio:
         sf.write(audio_path, y_trimmed, sr)
         return audio_path
 
-    def too_long_pause(self, min_pause_duration: float = None) -> dict:
+    def too_long_pause(self, min_pause_duration: float = 1.5) -> dict:
         pause_dict: dict = {}
 
         audio = self.audio_path_trimmed
