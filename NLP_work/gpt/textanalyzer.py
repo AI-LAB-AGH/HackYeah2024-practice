@@ -4,10 +4,6 @@ from . import api_key
 CLIENT = OpenAI(api_key=api_key.get_api_key())
 MODEL = "gpt-4o"
 
-import spacy
-nlp = spacy.load("pl_core_news_sm")
-
-
 
 class TextAnalyzer:
 
@@ -394,35 +390,35 @@ class TextAnalyzer:
             ]
         )
 
-    def passive_form_verifier_spacy(self, zdanie):
-        doc = nlp(zdanie)
-        bierne_czasowniki = []
+    # def passive_form_verifier_spacy(self, zdanie):
+    #     doc = nlp(zdanie)
+    #     bierne_czasowniki = []
         
-        for token in doc:
-            if token.pos_ == "VERB":
-                if "Voice=Pass" in token.morph:
-                    bierne_czasowniki.append(token.text)
+    #     for token in doc:
+    #         if token.pos_ == "VERB":
+    #             if "Voice=Pass" in token.morph:
+    #                 bierne_czasowniki.append(token.text)
 
-        if len(bierne_czasowniki) == 0:
-            return "brak"
-        else:
-            return "\n".join(bierne_czasowniki)
+    #     if len(bierne_czasowniki) == 0:
+    #         return "brak"
+    #     else:
+    #         return "\n".join(bierne_czasowniki)
 
-    def number_analysis_spacy(self, zdanie):
-        doc = nlp(zdanie)
-        liczby = []
+    # def number_analysis_spacy(self, zdanie):
+    #     doc = nlp(zdanie)
+    #     liczby = []
 
-        for token in doc:
-            if token.pos_ == "NUM":
-                liczby.append(token.text)
+    #     for token in doc:
+    #         if token.pos_ == "NUM":
+    #             liczby.append(token.text)
 
-        if len(zdanie.split()) == 0:
-            return "brak"
+    #     if len(zdanie.split()) == 0:
+    #         return "brak"
 
-        if len(liczby)/len(zdanie.split()) >= 0.1:
-            return "\n".join(liczby)
-        else:
-            return "brak"
+    #     if len(liczby)/len(zdanie.split()) >= 0.1:
+    #         return "\n".join(liczby)
+    #     else:
+    #         return "brak"
 
     def complex_sentence_searcher_simple(self, text):
         long_sentences = []
