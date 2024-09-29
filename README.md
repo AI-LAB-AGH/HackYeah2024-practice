@@ -1,6 +1,6 @@
 # Hack Yeah 2024 | Team: Magic Lab
 
-Głównym zadaniem konkursu była detekcja anomalii w pliku nagraniowym mówcy. Do wykonania zadania posłużono się uczeniem maszynowym i klasycznymi algorytmami. Wyniki pracy są widoczne w aplikacji webowej `tutaj będzie link`.
+Głównym zadaniem konkursu była detekcja anomalii w pliku nagraniowym mówcy. Do wykonania zadania posłużono się uczeniem maszynowym i klasycznymi algorytmami. Wyniki pracy byłby widoczne na hoście, gdyby działał :)
 
 ## Spis Treści
 
@@ -67,5 +67,16 @@ Celem projektu było wykrycie jak największej liczby anomalii z pliku nagraniow
 
 - generacja transkryptu wypowiedzi
 - identyfikacja błędów w wypowiedzi, w zakresie wypowiadanego tekstu, sposobu mowy oraz mowy ciała
+- detekcja osób nieproszonych na nagraniu
+- detekcja ruchów ciała z naciskiem na obracanie się i gestykulację
+- obliczanie szybkości wypowiedzi
+- automatyczne wykrywanie pauz
+- określanie poziomu głośności wypowiedzi na przestrzeni nagrania
+- wykrywanie żargonu, powtorzeń, zmiany tematu, zbyt długich wypowiedzi
+- detekcja wtrąceń słownictwa z obcego języka
+- wyznaczanie błędów w słownictwie i niezgodności z transkrypcją
+- używanie strony biernej
+- wykrywanie niepoprawnego akcentowania w języku angielskim 
+- analiza sentymentu wypowiedzi; ton, emocje, hate speech
 
 ---
