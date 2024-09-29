@@ -2,24 +2,24 @@
 
 _Short description of the task and project_
 
-## Table of Contents
+## Spis Treści
 
 - [Hack Yeah 2024 | Team: Magic Lab](#hack-yeah-2024--team-magic-lab)
-  - [Table of Contents](#table-of-contents)
-  - [Project Overview](#project-overview)
-  - [Team Members](#team-members)
-  - [Tech Stack](#tech-stack)
-  - [Features](#features)
+  - [Spis Treści](#table-of-contents)
+  - [Opis Projektu](#project-overview)
+  - [Członkowie Zespołu](#team-members)
+  - [Użyte Technologie](#tech-stack)
+  - [Funkcjonalności](#features)
   - [Installation](#installation)
   - [Run](#run)
 
 ---
 
-## Project Overview
+## Opis Projektu
 
 [Provide a detailed description of the project, its purpose, and the problem it solves. Include how this project fits within the hackathon theme.]
 
-## Team Members
+## Członkowie Zespołu
 
 - **Nazwa zespołu**: Magic Lab
 - **Członkowie**:
@@ -44,7 +44,7 @@ _Short description of the task and project_
   - Spacey
   - Librosa
 
-## Features
+## Funkcjonalności
 
 - [Feature 1]
 - [Feature 2]
