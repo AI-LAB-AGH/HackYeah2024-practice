@@ -27,6 +27,10 @@ class AnalyzeAudio:
         return tempo_dict
     
     def trim_audio(self) -> None:
+        trimedd_path = './audio_folder_trimmed/'
+        if not os.path.exists(trimedd_path):
+            os.makedirs(trimedd_path)
+
         for audio in os.listdir(self.audio_path):
             y, sr = librosa.load(self.audio_path + audio)
             y_trimmed, _ = librosa.effects.trim(y)
@@ -123,3 +127,33 @@ class AnalyzeAudio:
             loudness_dict[audio] = round(db, 1)
 
         return loudness_dict
+    
+    def white_noise(self) -> dict:
+        white_noise_dict: dict = {}
+
+        threshold = 0.5  # Próg dla płaskości widma
+        n_fft = 512  # Rozmiar ramki FFT
+        hop_length = n_fft // 2  # Krok analizy
+
+        for audio in os.listdir(self.audio_path_trimmed):
+            print(f'Analyzing {audio}...')
+            y, sr = librosa.load(self.audio_path_trimmed + audio)
+
+            # Oblicz płaskość widma
+            flatness = librosa.feature.spectral_flatness(y=y, n_fft=n_fft, hop_length=hop_length)
+
+            # Lista dla timestampów i wartości flatness > threshold
+            flatness_exceeding_threshold = []
+
+            # Przejdź przez każdą ramkę płaskości widmowej
+            for i, value in enumerate(flatness[0]):
+                if value > threshold:
+                    # Oblicz timestamp w sekundach na podstawie indeksu ramki
+                    timestamp = librosa.frames_to_time(i, sr=sr, hop_length=hop_length)
+                    # Dodaj tuple (timestamp, wartość płaskości)
+                    flatness_exceeding_threshold.append((timestamp, value))
+
+            # Dodaj wyniki do słownika
+            white_noise_dict[audio] = flatness_exceeding_threshold
+
+        return white_noise_dict

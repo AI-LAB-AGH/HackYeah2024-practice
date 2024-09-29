@@ -15,8 +15,10 @@ class SpeechToText:
         return "Class to load model from whisper_timestamped"
     
     def convert_audio(self) -> None:
+        audio_path = "./audio_folder"
+
         mp4_paths_list: list = []
-        for root, dirs, files in os.walk(self.path):
+        for root, dirs, files in os.walk(audio_path):
             for file in files:
                 if file.endswith(".mp4"):
                     mp4_paths_list.append(file)
@@ -26,8 +28,8 @@ class SpeechToText:
         for mp4_path in mp4_paths_list:
             prefix = mp4_path.split(".")[0]
             print(f"Converting {mp4_path} to wav")
-            clip = mp.VideoFileClip(f"{self.path}/{mp4_path}")
-            clip.audio.write_audiofile(f"{self.path}/{prefix}.wav")
+            clip = mp.VideoFileClip(f"{audio_path}/{mp4_path}")
+            clip.audio.write_audiofile(f"{audio_path}/{prefix}.wav")
             print(f"Converted {mp4_path} to wav")
 
     def transcribe_wav(self) -> str:
