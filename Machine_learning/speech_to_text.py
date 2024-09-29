@@ -1,6 +1,5 @@
 import os
 import json
-import torch
 import librosa
 import soundfile as sf
 import moviepy.editor as mp
@@ -9,7 +8,6 @@ import azure.cognitiveservices.speech as speechsdk
 
 class SpeechToText:
     def __init__(self) -> None:
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.key = "9cf400b6a7a3492c90b1ad0f6bd640f6"
         self.region = "westeurope"
 
