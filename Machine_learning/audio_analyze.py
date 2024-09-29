@@ -61,53 +61,58 @@ class AnalyzeAudio:
     def loudness_quietness(self) -> dict:
         loudness_dict: dict = {}
         quietness_dict: dict = {}
-
+    
         # Progi w decybelach
         upper_threshold_db = -20  # np. segmenty głośniejsze niż -20 dB
         lower_threshold_db = -40  # np. segmenty cichsze niż -40 dB
-
+    
         # Długość segmentu w sekundach
         segment_length = 0.5
-
+    
         for audio in os.listdir(self.audio_path_trimmed):
             print(f'Analyzing {audio}...')
             y, sr = librosa.load(self.audio_path_trimmed + audio)
-
+    
             # Zidentyfikuj segmenty niebędące ciszą (top_db określa próg ciszy)
             non_silent_intervals = librosa.effects.split(y, top_db=10)  # Próg ciszy to 30 dB
-
+    
             # Przechowuj poziomy głośności i cichości dla każdego segmentu
             loud_segments = []
             quiet_segments = []
-
+    
             for interval in non_silent_intervals:
                 start_sample, end_sample = interval
-
+    
                 # Podziel segmenty niebędące ciszą na fragmenty co 0.5 sekundy
                 for i in range(start_sample, end_sample, int(sr * segment_length)):
                     segment_end = min(i + int(sr * segment_length), end_sample)
                     segment = y[i:segment_end]
-
+    
                     if len(segment) > 0:
                         # Oblicz RMS i przekształć na dB
                         rms = np.sqrt(np.mean(segment**2))
                         db = self.rms_to_db(rms)
-
+    
                         # Konwersja próbek na czas
                         start_time = i / sr
                         end_time = segment_end / sr
-
+    
                         # Sprawdzanie czy dB przekracza progi
                         if db > upper_threshold_db:
-                            loud_segments.append((start_time, end_time, db))  # Głośne fragmenty
+                            loud_segments.append((start_time, end_time))  # Głośne fragmenty
                         elif db < lower_threshold_db:
-                            quiet_segments.append((start_time, end_time, db))  # Ciche fragmenty
-
-            # Zapis wyników dla każdego pliku audio
-            loudness_dict[audio] = loud_segments
-            quietness_dict[audio] = quiet_segments
-
+                            # Tylko start i stop, bez dB
+                            quiet_segments.append((start_time, end_time))  # Ciche fragmenty
+    
+            # Jeśli są głośne fragmenty, zastąp nazwę pliku wyrażeniem "za głośno"
+            if loud_segments:
+                loudness_dict["za głośno"] = loud_segments
+            # Jeśli są ciche fragmenty, zastąp nazwę pliku wyrażeniem "za cicho"
+            if quiet_segments:
+                quietness_dict["za cicho"] = quiet_segments
+    
         return loudness_dict, quietness_dict
+
     
     def overall_loudness(self) -> dict:
         loudness_dict: dict = {}
