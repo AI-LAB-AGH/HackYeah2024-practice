@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.middleware.csrf import get_token
 from django.http import FileResponse, HttpResponseNotFound
 from NLP_work.pipeline.pipeline_script import Pipeline
+from Machine_learning.vision_module import get_vision_anomaly_timestamps
 
 def index(request):
     csrf_token = get_token(request)
@@ -49,13 +50,15 @@ def process_video(request):
         pipeline.load_transcript()
         pipeline.clean_transcripts()
 
+        video_timestamps = get_vision_anomaly_timestamps(video_path=temp_file_path, frame_interval=0.5)
+
         print(pipeline.transcript)
         print(pipeline.get_fog_index())
         print(pipeline.do_tasks_on_video())
 
         return JsonResponse( { "transcript": pipeline.transcript,
                               "timestamps": pipeline.result['NBest'][0]['Words'],
-                              "url": temp_file_path }, status=201)
+                              "url": temp_file_path }.update(video_timestamps), status=201)
 
     return JsonResponse({'error': 'No video file uploaded'}, status=400)
 
@@ -98,4 +101,4 @@ def serve_temp_json_data(request):
     with open(temp_file_path, 'r') as json_file:
         json_data = json.load(json_file)
 
-    return JsonResponse(json_data, safe=False) 
+    return JsonResponse(json_data, safe=False)

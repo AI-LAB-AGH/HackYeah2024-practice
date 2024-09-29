@@ -67,7 +67,7 @@ class AnalyzeAudio:
         lower_threshold_db = -40  # np. segmenty cichsze niż -40 dB
 
         # Długość segmentu w sekundach
-        segment_length = 0.5  
+        segment_length = 0.5
 
         for audio in os.listdir(self.audio_path_trimmed):
             print(f'Analyzing {audio}...')

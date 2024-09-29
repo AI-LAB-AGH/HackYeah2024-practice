@@ -57,4 +57,4 @@ def get_vision_anomaly_timestamps(video_path, frame_interval=0.5):
 
     return r
 
-print(get_vision_anomaly_timestamps(os.path.join('data', 'videos', 'HY_2024_film_20.mp4')))
+print(get_vision_anomaly_timestamps(os.path.join('data', 'videos', 'HY_2024_film_13.mp4')))
