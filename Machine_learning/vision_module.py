@@ -21,7 +21,7 @@ def detect_vision_anomalies(video_path, frame_interval=1.0):
                 is_turned_away = is_turned(head_pose)
             gesture = detect_gestures(frame)
         #print(f'Turned away: {is_turned_away}, background disturbance: {background_disturbance}, gesture: {gesture}')
-        preds.append([background_disturbance, is_turned_away, gesture])
+        preds.append([is_turned_away, background_disturbance, gesture])
     return preds
 
 def get_vision_anomaly_timestamps(video_path, frame_interval=0.5):
@@ -36,15 +36,16 @@ def get_vision_anomaly_timestamps(video_path, frame_interval=0.5):
     for anomaly_type in preds:
         timestamps = []
         for i in range(len(anomaly_type)):
-            if anomaly_type[i] == None or (anomaly_type[i] == False and len(timestamps) == 0):
-                continue
-            else:
-                if anomaly_type[i] == True:
-                    if len(timestamps) == 0 or len(timestamps[-1]) == 2:
-                        timestamps.append([i * frame_interval])
-                elif anomaly_type[i] == False:
-                    if len(timestamps) > 0 and len(timestamps[-1]) == 1:
-                        timestamps[-1].append(i * frame_interval)
+            if i > 0 and i < len(anomaly_type) - 1 and not (anomaly_type[i-1] == False and anomaly_type[i] == True and anomaly_type[i+1] == False):
+                if anomaly_type[i] == None or (anomaly_type[i] == False and len(timestamps) == 0):
+                    continue
+                else:
+                    if anomaly_type[i] == True:
+                        if len(timestamps) == 0 or len(timestamps[-1]) == 2:
+                            timestamps.append([i * frame_interval])
+                    elif anomaly_type[i] == False:
+                        if len(timestamps) > 0 and len(timestamps[-1]) == 1:
+                            timestamps[-1].append(i * frame_interval)
 
         anomalies.append(timestamps)
     
@@ -55,3 +56,5 @@ def get_vision_anomaly_timestamps(video_path, frame_interval=0.5):
     r['Gesture'] = anomalies[2]
 
     return r
+
+print(get_vision_anomaly_timestamps(os.path.join('data', 'videos', 'HY_2024_film_20.mp4')))
