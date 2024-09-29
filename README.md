@@ -46,10 +46,8 @@ _Short description of the task and project_
 
 ## Funkcjonalności
 
-- [Feature 1]
-- [Feature 2]
-- [Feature 3]
-- [Any other key feature you'd like to mention]
+- generacja transkryptu wypowiedzi
+- identyfikacja błędów w wypowiedzi, w zakresie wypowiadanego tekstu, sposobu mowy oraz mowy ciała
 
 ---
 
