@@ -25,9 +25,9 @@ _Short description of the task and project_
 - **Członkowie**:
   - Piotr Błędowski - Computer Vision, AI - [GitHub/LinkedIn Profile]
   - Bartłomiej Kruczek - Przetwarzanie Audio, AI - [GitHub/LinkedIn Profile]
-  - Lidia Moryc - UI / UX design, Przetwarzanie Języka Naturalnego - [GitHub/LinkedIn Profile]
+  - Lidia Moryc - UI / UX design, Przetwarzanie Języka Naturalnego, AI - [GitHub/LinkedIn Profile]
   - Max Słota - Web Development, Integration - [GitHub/LinkedIn Profile]
-  - Adam Stajek - Przetwarzanie Języka Naturalnego - [GitHub/LinkedIn Profile]
+  - Adam Stajek - Przetwarzanie Języka Naturalnego, AI - [GitHub/LinkedIn Profile]
 
 ## Użyte technologie
 
