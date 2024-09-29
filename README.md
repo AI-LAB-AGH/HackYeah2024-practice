@@ -21,18 +21,28 @@ _Short description of the task and project_
 
 ## Team Members
 
-- **Team Name**: [Team Name]
-- **Members**:
-  - [Name 1] - [Role] - [GitHub/LinkedIn Profile]
-  - [Name 2] - [Role] - [GitHub/LinkedIn Profile]
-  - [Name 3] - [Role] - [GitHub/LinkedIn Profile]
-  - [Name 4] - [Role] - [GitHub/LinkedIn Profile]
+- **Nazwa zespołu**: Magic Lab
+- **Członkowie**:
+  - Piotr Błędowski - Computer Vision, AI - [GitHub/LinkedIn Profile]
+  - Bartłomiej Kruczek - Przetwarzanie Audio, AI - [GitHub/LinkedIn Profile]
+  - Lidia Moryc - UI / UX design, Przetwarzanie Języka Naturalnego - [GitHub/LinkedIn Profile]
+  - Max Słota - Web Development, Integration - [GitHub/LinkedIn Profile]
+  - Adam Stajek - Przetwarzanie Języka Naturalnego - [GitHub/LinkedIn Profile]
 
-## Tech Stack
+## Użyte technologie
 
-- **Languages**:
-- **Frameworks/Libraries**:
-- **Tools/Platforms**:
+### Aplikacja webowa:
+  - Django, Django REST Framework (backend)
+  - React.js (frontend)
+
+### Przetwarzanie danych / AI:
+  - OpenCV
+  - Mediapipe
+  - Ultralytics (YOLO)
+  - NLTK
+  - OpenAI
+  - Spacey
+  - Librosa
 
 ## Features
 
