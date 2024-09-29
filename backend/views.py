@@ -1,16 +1,37 @@
 import os
+import json
 import tempfile
 import speech_recognition as sr
 from django.http import JsonResponse
 from moviepy.editor import VideoFileClip
 from django.shortcuts import render
 from django.middleware.csrf import get_token
-
+from django.http import FileResponse, HttpResponseNotFound
+from NLP_work.pipeline.pipeline_script import Pipeline
+from Machine_learning.vision_module import get_vision_anomaly_timestamps
 
 def index(request):
     csrf_token = get_token(request)
     return render(request, 'index.html')
+
+
+def serve_temp_file(request):
+    temp_file_path = request.session['temp_file_path']
     
+    if os.path.exists(temp_file_path):
+        return FileResponse(open(temp_file_path, 'rb'), content_type='video/mp4')
+    else:
+        return HttpResponseNotFound('File not found')
+    
+
+def delete_video(request):
+    temp_file_path = request.session['temp_file_path']
+    
+    if os.path.exists(temp_file_path):
+        os.remove(temp_file_path)
+    else:
+        return HttpResponseNotFound('File not found')
+
 
 def process_video(request):
     if request.method == 'POST' and request.FILES.get('video'):
@@ -18,28 +39,26 @@ def process_video(request):
 
         temp_dir = tempfile.gettempdir()
         temp_file_path = os.path.join(temp_dir, video.name)
+        request.session['temp_file_path'] = temp_file_path
 
         with open(temp_file_path, 'wb+') as temp_file:
             for chunk in video.chunks():
                 temp_file.write(chunk)
 
-        audio_path = mp4_to_wav(temp_file_path)
-        transcript = speech_to_text(audio_path)
+        pipeline = Pipeline(video_path=temp_file_path)
+        pipeline.create_transcript()
+        pipeline.load_transcript()
+        pipeline.clean_transcripts()
 
-        os.remove(temp_file_path)
+        video_timestamps = get_vision_anomaly_timestamps(video_path=temp_file_path, frame_interval=0.5)
 
-        return JsonResponse( { "transcript": transcript }, status=201)
+        print(pipeline.transcript)
+        print(pipeline.get_fog_index())
+        print(pipeline.do_tasks_on_video())
 
-    return JsonResponse({'error': 'No video file uploaded'}, status=400)
-
-
-def upload_video(request):
-    if request.method == 'POST' and request.FILES.get('video'):
-        video = request.FILES['video']
-        blob_service_client = BlobServiceClient.from_connection_string("DefaultEndpointsProtocol=https;AccountName=hub17610921168;AccountKey=CASOXObgv/Qksm76gp2ps0kBvzZ910pKuYi2j0RILLdQjSKHMr0/I+PcE7NqWZKaM9VlphaKfGz2+AStAvJImg==;EndpointSuffix=core.windows.net")
-        blob_client = blob_service_client.get_blob_client(container='hackathon', blob=video.name)
-        blob_client.upload_blob(video.read(), overwrite=True)
-        return JsonResponse( { "url": "url" }, status=201)
+        return JsonResponse( { "transcript": pipeline.transcript,
+                              "timestamps": pipeline.result['NBest'][0]['Words'],
+                              "url": temp_file_path }.update(video_timestamps), status=201)
 
     return JsonResponse({'error': 'No video file uploaded'}, status=400)
 
@@ -62,3 +81,24 @@ def speech_to_text(file_path):
 
         except:
             return "Nie rozpoznano"
+        
+
+def write_to_temp_json_file():
+    data = [{"timestamp": 3.12, "type": 1},
+    {"timestamp": 6.12, "type": 2},
+    {"timestamp": 9.12, "type": 0},
+    {"timestamp": 12.12, "type": 0},
+    {"timestamp": 15.12, "type": 2},]
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as temp_file:
+        json.dump(data, temp_file)
+        return temp_file.name
+
+
+def serve_temp_json_data(request):
+    temp_file_path = write_to_temp_json_file()
+    
+    with open(temp_file_path, 'r') as json_file:
+        json_data = json.load(json_file)
+
+    return JsonResponse(json_data, safe=False)

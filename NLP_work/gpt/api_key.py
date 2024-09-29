@@ -1,4 +1,4 @@
 
 def get_api_key():
-    return "sk-h56MEeFK04uCrIVgmL12RuV3Jbc_TQ3JJzLxNhHRp7T3BlbkFJmsd-MQ4GPz-mV2H2j4JRE0Wsfl2SVhO4SiXHVJgPcA"
+    return "sk-zS4WTJrwr5YYSGC6Lw4zjtmIAq4M7NirjwDhlCns1RT3BlbkFJhtcDIdjvUwaejm1Yf6JjwQX0UGVh_6niMq073DO9oA"
 

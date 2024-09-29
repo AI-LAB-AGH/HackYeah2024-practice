@@ -90,6 +90,7 @@ coverage.xml
 # Environments configuration
 .env
 .env.*
+venv
 
 # macOS
 .DS_Store
@@ -107,3 +108,11 @@ node_modules/
 
 # other
 wetransfer_hackyeah-2024-breakwordtraps_2024-09-28_0449
+notebooks/testing.ipynb
+notebooks/yolo.py
+data/videos
+Machine_learning/testing.py
+
+
+#venv
+venv

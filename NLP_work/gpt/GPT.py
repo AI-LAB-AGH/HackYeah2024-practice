@@ -1,8 +1,10 @@
 from openai import OpenAI
+
 from . import prompts
 from . import api_key
 from . import textanalyzer
 from . import topic_change_searcher
+
 
 CLIENT = OpenAI(api_key=api_key.get_api_key())
 MODEL = "gpt-4o"

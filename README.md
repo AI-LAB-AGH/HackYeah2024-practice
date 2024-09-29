@@ -2,39 +2,49 @@
 
 _Short description of the task and project_
 
-## Table of Contents
+## Spis Treści
 
 - [Hack Yeah 2024 | Team: Magic Lab](#hack-yeah-2024--team-magic-lab)
-  - [Table of Contents](#table-of-contents)
-  - [Project Overview](#project-overview)
-  - [Team Members](#team-members)
-  - [Tech Stack](#tech-stack)
-  - [Features](#features)
+  - [Spis Treści](#table-of-contents)
+  - [Opis Projektu](#project-overview)
+  - [Członkowie Zespołu](#team-members)
+  - [Użyte Technologie](#tech-stack)
+  - [Funkcjonalności](#features)
   - [Installation](#installation)
   - [Run](#run)
 
 ---
 
-## Project Overview
+## Opis Projektu
 
 [Provide a detailed description of the project, its purpose, and the problem it solves. Include how this project fits within the hackathon theme.]
 
-## Team Members
+## Członkowie Zespołu
 
-- **Team Name**: [Team Name]
-- **Members**:
-  - [Name 1] - [Role] - [GitHub/LinkedIn Profile]
-  - [Name 2] - [Role] - [GitHub/LinkedIn Profile]
-  - [Name 3] - [Role] - [GitHub/LinkedIn Profile]
-  - [Name 4] - [Role] - [GitHub/LinkedIn Profile]
+- **Nazwa zespołu**: Magic Lab
+- **Członkowie**:
+  - Piotr Błędowski - Computer Vision, AI - [GitHub/LinkedIn Profile]
+  - Bartłomiej Kruczek - Przetwarzanie Audio, AI - [GitHub/LinkedIn Profile]
+  - Lidia Moryc - UI / UX design, Przetwarzanie Języka Naturalnego, AI - [GitHub/LinkedIn Profile]
+  - Max Słota - Web Development, Integration - [GitHub/LinkedIn Profile]
+  - Adam Stajek - Przetwarzanie Języka Naturalnego, AI - [GitHub/LinkedIn Profile]
 
-## Tech Stack
+## Użyte technologie
 
-- **Languages**:
-- **Frameworks/Libraries**:
-- **Tools/Platforms**:
+### Aplikacja webowa:
+  - Django, Django REST Framework (backend)
+  - React.js (frontend)
 
-## Features
+### Przetwarzanie danych / AI:
+  - OpenCV
+  - Mediapipe
+  - Ultralytics (YOLO)
+  - NLTK
+  - OpenAI
+  - Spacey
+  - Librosa
+
+## Funkcjonalności
 
 - [Feature 1]
 - [Feature 2]
