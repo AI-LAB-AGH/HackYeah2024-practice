@@ -1,23 +1,38 @@
 # Hack Yeah 2024 | Team: Magic Lab
 
-_Short description of the task and project_
+Głównym zadaniem konkursu była detekcja anomalii w pliku nagraniowym mówcy. Do wykonania zadania posłużono się uczeniem maszynowym i klasycznymi algorytmami. Wyniki pracy są widoczne w aplikacji webowej `tutaj będzie link`.
 
 ## Spis Treści
 
 - [Hack Yeah 2024 | Team: Magic Lab](#hack-yeah-2024--team-magic-lab)
-  - [Spis Treści](#table-of-contents)
-  - [Opis Projektu](#project-overview)
-  - [Członkowie Zespołu](#team-members)
-  - [Użyte Technologie](#tech-stack)
-  - [Funkcjonalności](#features)
+  - [Spis Treści](#spis-treści)
   - [Installation](#installation)
   - [Run](#run)
+  - [Członkowie Zespołu](#członkowie-zespołu)
+  - [Szczegółowy opis projektu](#szczegółowy-opis-projektu)
+  - [Użyte technologie](#użyte-technologie)
+    - [Aplikacja webowa:](#aplikacja-webowa)
+    - [Przetwarzanie danych / AI:](#przetwarzanie-danych--ai)
+  - [Funkcjonalności](#funkcjonalności)
 
 ---
 
-## Opis Projektu
+## Installation
 
-[Provide a detailed description of the project, its purpose, and the problem it solves. Include how this project fits within the hackathon theme.]
+Clone the repository:
+
+   ```bash
+   git clone https://github.com/username/repo-name.git
+   cd repo-name
+   ```
+
+## Run
+
+W celu uruchomienia aplikacji należy wykonać poniższe kroki:
+- po lewej stronie ekranu wybrać plik do przetworzenia z dysku lokalnego
+- kliknąć przycisk `Przetwórz`
+- poczekać na zakończenie przetwarzania
+- obserwować wyniki oraz prawą stronę ekranu, gdzie wyświetlone zostaną informacje o przetworzonym pliku
 
 ## Członkowie Zespołu
 
@@ -28,6 +43,10 @@ _Short description of the task and project_
   - Lidia Moryc - UI / UX design, Przetwarzanie Języka Naturalnego, AI - [GitHub/LinkedIn Profile]
   - Max Słota - Web Development, Integration - [GitHub/LinkedIn Profile]
   - Adam Stajek - Przetwarzanie Języka Naturalnego, AI - [GitHub/LinkedIn Profile]
+
+## Szczegółowy opis projektu
+
+Celem projektu było wykrycie jak największej liczby anomalii z pliku nagraniowego. Cały proces podzielono na trzy etapy: przetwarzanie wideo, przetwarzanie audio oraz przetwarzanie tekstu. Do przetwarzania obrazu użyto algorytmów `Computer Vision`, do przetwarzania tekstu posłużono się algorytmami `Natural Language Processing`, a do przetwarzania dźwięku użyto klasycznych algorytmów opartych na przetwarzaniu sygnałów ze względu na ograniczenia sprzętowe. 
 
 ## Użyte technologie
 
@@ -50,16 +69,3 @@ _Short description of the task and project_
 - identyfikacja błędów w wypowiedzi, w zakresie wypowiadanego tekstu, sposobu mowy oraz mowy ciała
 
 ---
-
-## Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/username/repo-name.git
-   cd repo-name
-   ```
-
-## Run
-
-...
