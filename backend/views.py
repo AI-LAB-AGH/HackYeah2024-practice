@@ -49,6 +49,18 @@ def process_video(request):
         pipeline.create_transcript()
         pipeline.load_transcript()
         pipeline.clean_transcripts()
+        anomalies_dict = pipeline.do_tasks_on_video()
+
+        anomalies_keys = ["filler_words", "repeated_words", "complex_words", "complex_sentences", "jargon_words",
+                          "non-polish_words", "non-existing_words", "passive_voice", "change_of_topic", "numbers"]
+
+        for word_dict in pipeline.result['NBest'][0]['Words']:
+            word = word_dict["Word"]
+            word_dict["Anomalies"] = []
+            for key in anomalies_keys:
+                if word in anomalies_dict[key]:
+                    word_dict["Anomalies"].append(key)
+
 
         video_timestamps = get_vision_anomaly_timestamps(video_path=temp_file_path, frame_interval=0.5)
 
