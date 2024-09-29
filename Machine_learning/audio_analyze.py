@@ -36,27 +36,29 @@ class AnalyzeAudio:
 
     def too_long_pause(self, min_pause_duration: float = 1.5) -> dict:
         pause_dict: dict = {}
-
+    
         audio = self.audio_path_trimmed
         print(f'Analyzing {audio}...')
         y, sr = librosa.load(self.audio_path_trimmed + audio)
         non_silent_intervals = librosa.effects.split(y, top_db=30)
         pause_list: list = []
-
+    
         for i in range(1, len(non_silent_intervals)):
             start_of_pause = non_silent_intervals[i-1][1]  # koniec poprzedniego segmentu
             end_of_pause = non_silent_intervals[i][0]      # początek kolejnego segmentu
             pause_duration = (end_of_pause - start_of_pause) / sr  # długość pauzy w sekundach
-
+    
             if min_pause_duration is None or pause_duration >= min_pause_duration:
-                # Dodajemy pauzę jako tuplę (początek, koniec, długość pauzy)
+                # Dodajemy pauzę jako tuplę (początek, koniec) bez długości pauzy
                 pause_list.append(
-                    (round(start_of_pause / sr, 3), round(end_of_pause / sr, 3), round(pause_duration, 3))
+                    (round(start_of_pause / sr, 3), round(end_of_pause / sr, 3))
                 )
-
-        pause_dict[audio] = pause_list
-
+    
+        # Zamiast nazwy pliku, używamy klucza "pauza"
+        pause_dict["pauza"] = pause_list
+    
         return pause_dict
+
     
     def loudness_quietness(self) -> dict:
         loudness_dict: dict = {}
