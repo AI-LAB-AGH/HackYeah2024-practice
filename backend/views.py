@@ -7,6 +7,7 @@ from moviepy.editor import VideoFileClip
 from django.shortcuts import render
 from django.middleware.csrf import get_token
 from django.http import FileResponse, HttpResponseNotFound
+from NLP_work.pipeline.pipeline_script import Pipeline
 
 def index(request):
     csrf_token = get_token(request)
@@ -43,11 +44,15 @@ def process_video(request):
             for chunk in video.chunks():
                 temp_file.write(chunk)
 
-        audio_path = mp4_to_wav(temp_file_path)
-        transcript = speech_to_text(audio_path)
+        pipeline = Pipeline(video_path=temp_file_path)
+        pipeline.create_transcript()
+        pipeline.load_transcript()
+        pipeline.clean_transcripts()
+        print(pipeline.transcript)
+        print(pipeline.get_fog_index())
+        print(pipeline.do_tasks_on_video())
 
-
-        return JsonResponse( { "transcript": transcript, "url": temp_file_path }, status=201)
+        return JsonResponse( { "transcript": pipeline.transcript, "url": temp_file_path }, status=201)
 
     return JsonResponse({'error': 'No video file uploaded'}, status=400)
 
