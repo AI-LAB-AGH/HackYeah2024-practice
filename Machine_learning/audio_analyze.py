@@ -61,11 +61,11 @@ class AnalyzeAudio:
     def loudness_quietness(self) -> dict:
         loudness_dict: dict = {}
         quietness_dict: dict = {}
-
+    
         # Progi w decybelach
         upper_threshold_db = -20  # np. segmenty głośniejsze niż -20 dB
         lower_threshold_db = -40  # np. segmenty cichsze niż -40 dB
-
+    
         # Długość segmentu w sekundach
         segment_length = 0.5
 
@@ -109,6 +109,7 @@ class AnalyzeAudio:
             quietness_dict[audio] = quiet_segments
 
         return loudness_dict, quietness_dict
+
     
     def overall_loudness(self) -> dict:
         loudness_dict: dict = {}
