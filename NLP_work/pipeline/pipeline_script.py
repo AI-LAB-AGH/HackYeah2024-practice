@@ -11,12 +11,11 @@ class Pipeline:
         self.transcript_path = None
 
     def create_transcript(self):
-        speechToText = SpeechToText(self.path)
-        self.transcript_path = speechToText.transcribe_wav(self.path)
+        speechToText = SpeechToText()
+        self.result = speechToText.transcribe_wav(self.path)
 
     def load_transcript(self):
-        with open(self.transcript_path, "r", encoding='utf-8') as f:
-            self.transcript = f.read()
+        self.transcript = self.result["DisplayText"]
 
     def clean_transcripts(self):
         self.transcript = self.gpt.clean_transcript(self.transcript)

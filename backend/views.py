@@ -48,11 +48,14 @@ def process_video(request):
         pipeline.create_transcript()
         pipeline.load_transcript()
         pipeline.clean_transcripts()
+
         print(pipeline.transcript)
         print(pipeline.get_fog_index())
         print(pipeline.do_tasks_on_video())
 
-        return JsonResponse( { "transcript": pipeline.transcript, "url": temp_file_path }, status=201)
+        return JsonResponse( { "transcript": pipeline.transcript,
+                              "timestamps": pipeline.result['NBest'][0]['Words'],
+                              "url": temp_file_path }, status=201)
 
     return JsonResponse({'error': 'No video file uploaded'}, status=400)
 
