@@ -354,6 +354,46 @@ class TextAnalyzer:
         answer = check_repetitions.choices[0].message.content
         return answer
 
+    def non_existent_word_searcher(self, text):
+
+        check_non_existent_words = CLIENT.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system",
+                 "content": '''Jesteś ekspertem językowym, który z łatwością identyfikuje słowa, które nie istnieją w języku polskim. Twoim zadaniem jest analiza tekstu w celu znalezienia i wypisania takich słów, które są błędne lub niepoprawne. Odpowiadasz precyzyjnie i profesjonalnie.'''},
+                {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim słów, które nie istnieją w języku polskim. Wypisz każde nieistniejące słowo w osobnej linii.
+
+                                                <PRZYKŁAD1>
+                                                %%%TEKST%%%
+                                                Ostatnio zauważyliśmy wzrost efektywności pracowników, jednak niektóre z nowych rozwiązań są niedopracowalizowane.
+
+                                                %%%ODPOWIEDŹ%%%
+                                                niedopracowalizowane
+                                                </PRZYKŁAD1>
+
+                                                <PRZYKŁAD2>
+                                                %%%TEKST%%%
+                                                System zintegrował się z naszymi procesami, ale pojawiły się pewne nieprzewidzalne trudności w procedurze wdrożeniowej.
+
+                                                %%%ODPOWIEDŹ%%%
+                                                nieprzewidzalne
+                                                </PRZYKŁAD2>
+
+                                                <PRZYKŁAD3>
+                                                %%%TEKST%%%
+                                                Nowy projekt wymagał dodatkowych zasobów i rewizji pierwotniakowych założeń, jednak nie wszyscy uczestnicy byli w pełni zaangażowani w proces implementacyjny.
+
+                                                %%%ODPOWIEDŹ%%%
+                                                pierwotniakowych
+                                                </PRZYKŁAD3>
+
+                                                %%%TEKST%%%                 
+                                                {text}
+
+                                                %%%ODPOWIEDŹ%%%'''}
+            ]
+        )
+
     def passive_form_verifier_spacy(self, zdanie):
         doc = nlp(zdanie)
         bierne_czasowniki = []

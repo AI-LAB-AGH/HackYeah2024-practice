@@ -2,6 +2,7 @@ from openai import OpenAI
 from . import prompts
 from . import api_key
 from . import textanalyzer
+from . import topic_change_searcher
 
 CLIENT = OpenAI(api_key=api_key.get_api_key())
 MODEL = "gpt-4o"
@@ -17,9 +18,9 @@ class GPT:
             "complex_sentences": textanalyzer.TextAnalyzer().complex_sentence_searcher_simple(transcript),
             "jargon_words": textanalyzer.TextAnalyzer().jargon_searcher(transcript),
             "non-polish_words": textanalyzer.TextAnalyzer().foreign_word_searcher(transcript),
-            "non-existing_words": self.query_gpt(prompts.non_existing_words_prompt(transcript)),
+            "non-existing_words": textanalyzer.TextAnalyzer().non_existent_word_searcher(transcript),
             "passive_voice": textanalyzer.TextAnalyzer().passive_form_verifier_spacy(transcript),
-            "change_of_topic": self.query_gpt(prompts.unexpected_topic_change_prompt(transcript)),
+            "change_of_topic": topic_change_searcher.Topic_change_searcher(transcript).predict(),
             "numbers": textanalyzer.TextAnalyzer().number_analysis_spacy(transcript),
             "target_group": self.query_gpt(prompts.target_group_prompt(transcript)),
             "questions": self.query_gpt(prompts.valid_questions_prompt(transcript)),
