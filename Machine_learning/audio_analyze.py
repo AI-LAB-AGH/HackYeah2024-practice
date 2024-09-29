@@ -6,7 +6,7 @@ import numpy as np
 class AnalyzeAudio:
     def __init__(self, audio_path='./audio_path') -> None:
         self.audio_path = audio_path
-        self.audio_path_trimmed = audio_path + '_trimmed'
+        self.audio_path_trimmed = audio_path.split(".")[0] + '_trim.wav'
 
     def __repr__(self) -> str:
         return f'AnalyzeAudio({self.audio_path})'
@@ -26,35 +26,35 @@ class AnalyzeAudio:
 
         return tempo_dict
     
-    def trim_audio(self) -> None:
-        for audio in os.listdir(self.audio_path):
-            y, sr = librosa.load(self.audio_path + audio)
-            y_trimmed, _ = librosa.effects.trim(y)
-            
-            # save to folder audio_folder_trimmed
-            sf.write(f'./audio_folder_trimmed/{audio}', y_trimmed, sr)
+    def trim_audio(self, audio_path) -> None:
+        y, sr = librosa.load(audio_path)
+        y_trimmed, _ = librosa.effects.trim(y)
+        
+        audio_path = audio_path.split(".")[0] + '_trim.wav'
+        sf.write(audio_path, y_trimmed, sr)
+        return audio_path
 
     def too_long_pause(self, min_pause_duration: float = None) -> dict:
         pause_dict: dict = {}
 
-        for audio in os.listdir(self.audio_path_trimmed):
-            print(f'Analyzing {audio}...')
-            y, sr = librosa.load(self.audio_path_trimmed + audio)
-            non_silent_intervals = librosa.effects.split(y, top_db=30)
-            pause_list: list = []
+        audio = self.audio_path_trimmed
+        print(f'Analyzing {audio}...')
+        y, sr = librosa.load(self.audio_path_trimmed + audio)
+        non_silent_intervals = librosa.effects.split(y, top_db=30)
+        pause_list: list = []
 
-            for i in range(1, len(non_silent_intervals)):
-                start_of_pause = non_silent_intervals[i-1][1]  # koniec poprzedniego segmentu
-                end_of_pause = non_silent_intervals[i][0]      # początek kolejnego segmentu
-                pause_duration = (end_of_pause - start_of_pause) / sr  # długość pauzy w sekundach
+        for i in range(1, len(non_silent_intervals)):
+            start_of_pause = non_silent_intervals[i-1][1]  # koniec poprzedniego segmentu
+            end_of_pause = non_silent_intervals[i][0]      # początek kolejnego segmentu
+            pause_duration = (end_of_pause - start_of_pause) / sr  # długość pauzy w sekundach
 
-                if min_pause_duration is None or pause_duration >= min_pause_duration:
-                    # Dodajemy pauzę jako tuplę (początek, koniec, długość pauzy)
-                    pause_list.append(
-                        (round(start_of_pause / sr, 3), round(end_of_pause / sr, 3), round(pause_duration, 3))
-                    )
+            if min_pause_duration is None or pause_duration >= min_pause_duration:
+                # Dodajemy pauzę jako tuplę (początek, koniec, długość pauzy)
+                pause_list.append(
+                    (round(start_of_pause / sr, 3), round(end_of_pause / sr, 3), round(pause_duration, 3))
+                )
 
-            pause_dict[audio] = pause_list
+        pause_dict[audio] = pause_list
 
         return pause_dict
     
@@ -69,39 +69,40 @@ class AnalyzeAudio:
         # Długość segmentu w sekundach
         segment_length = 0.5
 
-        for audio in os.listdir(self.audio_path_trimmed):
-            print(f'Analyzing {audio}...')
-            y, sr = librosa.load(self.audio_path_trimmed + audio)
+        audio = self.audio_path_trimmed
 
-            # Zidentyfikuj segmenty niebędące ciszą (top_db określa próg ciszy)
-            non_silent_intervals = librosa.effects.split(y, top_db=10)  # Próg ciszy to 30 dB
+        print(f'Analyzing {audio}...')
+        y, sr = librosa.load(self.audio_path_trimmed + audio)
 
-            # Przechowuj poziomy głośności i cichości dla każdego segmentu
-            loud_segments = []
-            quiet_segments = []
+        # Zidentyfikuj segmenty niebędące ciszą (top_db określa próg ciszy)
+        non_silent_intervals = librosa.effects.split(y, top_db=10)  # Próg ciszy to 30 dB
 
-            for interval in non_silent_intervals:
-                start_sample, end_sample = interval
+        # Przechowuj poziomy głośności i cichości dla każdego segmentu
+        loud_segments = []
+        quiet_segments = []
 
-                # Podziel segmenty niebędące ciszą na fragmenty co 0.5 sekundy
-                for i in range(start_sample, end_sample, int(sr * segment_length)):
-                    segment_end = min(i + int(sr * segment_length), end_sample)
-                    segment = y[i:segment_end]
+        for interval in non_silent_intervals:
+            start_sample, end_sample = interval
 
-                    if len(segment) > 0:
-                        # Oblicz RMS i przekształć na dB
-                        rms = np.sqrt(np.mean(segment**2))
-                        db = self.rms_to_db(rms)
+            # Podziel segmenty niebędące ciszą na fragmenty co 0.5 sekundy
+            for i in range(start_sample, end_sample, int(sr * segment_length)):
+                segment_end = min(i + int(sr * segment_length), end_sample)
+                segment = y[i:segment_end]
 
-                        # Konwersja próbek na czas
-                        start_time = i / sr
-                        end_time = segment_end / sr
+                if len(segment) > 0:
+                    # Oblicz RMS i przekształć na dB
+                    rms = np.sqrt(np.mean(segment**2))
+                    db = self.rms_to_db(rms)
 
-                        # Sprawdzanie czy dB przekracza progi
-                        if db > upper_threshold_db:
-                            loud_segments.append((start_time, end_time, db))  # Głośne fragmenty
-                        elif db < lower_threshold_db:
-                            quiet_segments.append((start_time, end_time, db))  # Ciche fragmenty
+                    # Konwersja próbek na czas
+                    start_time = i / sr
+                    end_time = segment_end / sr
+
+                    # Sprawdzanie czy dB przekracza progi
+                    if db > upper_threshold_db:
+                        loud_segments.append((start_time, end_time, db))  # Głośne fragmenty
+                    elif db < lower_threshold_db:
+                        quiet_segments.append((start_time, end_time, db))  # Ciche fragmenty
 
             # Zapis wyników dla każdego pliku audio
             loudness_dict[audio] = loud_segments
