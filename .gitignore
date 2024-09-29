@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+NLP_work/gpt/api_key.py
 # C extensions
 *.so
 
@@ -103,6 +104,9 @@ Desktop.ini
 
 # npm
 node_modules/
+
+# other
+wetransfer_hackyeah-2024-breakwordtraps_2024-09-28_0449
 
 #venv
 venv
