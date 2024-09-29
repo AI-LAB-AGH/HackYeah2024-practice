@@ -170,10 +170,6 @@ def extract_frames(video_path, frame_interval=0.1):
             frames.append(frame)
         count += 1
 
-    # for image in frames:  
-    #     cv2.imshow("frame", image)
-    #     cv2.waitKey(500)
-
     cap.release()
     return frames
 
