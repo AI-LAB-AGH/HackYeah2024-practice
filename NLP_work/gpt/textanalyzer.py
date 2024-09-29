@@ -23,7 +23,7 @@ class TextAnalyzer:
                 {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i wykrycie, czy użyto w nich fomę bezosobową bierną. 
                                                 Forma bierna rozumiana jest jako .... 
                                                 Uważnie przeanalizuj poniższe przykłady. Przyswój logikę rozumowania i zwróć odpowiedź.
-                                                Myśl krok po kroku.
+                                                Myśl krok po kroku. Jeśli nie znajdziesz żadnych przykładów, zwróć w odpowiedzi po prostu słowo \"brak\".
                  
                                                 <PRZYKŁAD1>
                                                 %%%TEKST%%%
@@ -62,56 +62,57 @@ class TextAnalyzer:
         answer = ckeck_if_passive_voice.choices[0].message.content
         return answer
 
-    def important_phrases_searcher(self, text):
 
-        check_important_phrases = CLIENT.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system",
-                 "content": '''Jesteś pomocnym specjalistą języka polskiego i z łatwością określasz istotne frazy w tekście. Pracujesz przy analizie tekstu, która polega na wskazywaniu najbardziej istotnych miejsc w tekście. Odpowiadasz szczerze, w oficjalnym i przyjaznym dla użytkownika stylu.'''},
-                {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim najważniejszych cytatów. Cytatów może być kilka, ale staraj się, by nie były dłuższe niż 2-3 słowa.
-                                                Myśl krok po kroku. Twoja odpowiedź powinna składać się tylko z istotnych cytatów, jeden na linię.
 
-                                                <PRZYKŁAD1>
-                                                %%%TEKST%%%
-                                                Podczas spotkania omówiono szereg rozwiązań, w tym tych wdrażanych w innych krajach, które mogłyby przyczynić się do poprawy nadzoru nad sektorem zdrowia publicznego. Podkreślono, że zwiększenie kontroli nad wydatkowaniem środków oraz skuteczniejsza współpraca instytucji państwowych powinny być priorytetem dla całego sektora. Zwrócono również uwagę na istotny aspekt ochrony zdrowia obywateli. W trakcie dyskusji poruszono także inne bieżące kwestie związane z finansowaniem systemu ochrony zdrowia i jego efektywnością.
+    def important_fragments_searcher(self, text):
+            check_important_fragments = CLIENT.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system",
+                     "content": '''Jesteś ekspertem językowym, który analizuje tekst w celu znalezienia i wskazania najważniejszych fragmentów. Twoim zadaniem jest wyodrębnienie kluczowych informacji z tekstu, ograniczając się do maksymalnie 3-4 słów na każdy fragment. Odpowiadasz precyzyjnie i profesjonalnie.'''},
+                    {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i wyodrębnienie najważniejszych fragmentów. Fragmenty te powinny liczyć maksymalnie 3-4 słowa i reprezentować kluczowe informacje lub idee zawarte w tekście. Wypisz każdy fragment w osobnej linii. Jeśli nie znajdziesz żadnych przykładów, zwróć w odpowiedzi po prostu słowo \"brak\".
 
-                                                %%%ODPOWIEDŹ%%%
-                                                ochrony zdrowia obywateli
-                                                sektorem zdrowia publicznego
-                                                ochrona zdrowia obywateli
-                                                </PRZYKŁAD1>
+                                                    <PRZYKŁAD1>
+                                                    %%%TEKST%%%
+                                                    Podczas spotkania omówiono kwestie związane z wdrożeniem nowego systemu, którego celem jest zwiększenie efektywności pracy zespołów oraz poprawa komunikacji między działami. Podkreślono także znaczenie lepszej koordynacji działań i wykorzystania zasobów.
 
-                                                <PRZYKŁAD2>
-                                                %%%TEKST%%%
-                                                Audytem objęliśmy 96 podmiotów, a łączna kwota badanych środków publicznych to około 100 miliardów złotych. W toku działań stwierdziliśmy m.in. niegospodarne i niecelowe wydatkowanie środków publicznych, udzielenie dotacji podmiotów, które nie spełniały kryteriów konkursowych.
+                                                    %%%ODPOWIEDŹ%%%
+                                                    wdrożenie nowego systemu
+                                                    zwiększenie efektywności pracy
+                                                    poprawa komunikacji
+                                                    koordynacja działań
+                                                    </PRZYKŁAD1>
 
-                                                %%%ODPOWIEDŹ%%%
-                                                96 podmiotów
-                                                100 miliardów złotych
-                                                </PRZYKŁAD2>
+                                                    <PRZYKŁAD2>
+                                                    %%%TEKST%%%
+                                                    Zespół opracował strategię marketingową mającą na celu dotarcie do nowych klientów poprzez kampanie online oraz partnerstwa z innymi firmami technologicznymi. Plan zakłada również rozszerzenie obecności na mediach społecznościowych. 
 
-                                                <PRZYKŁAD3>
-                                                %%%TEKST%%%
-                                                Ministerstwo Zdrowia wprowadza nowy program profilaktyki zdrowotnej, który ma na celu poprawę jakości życia obywateli. Eksperci opracowują szczegółowe wytyczne dotyczące zdrowego stylu życia, a także rekomendacje dla placówek medycznych.
+                                                    %%%ODPOWIEDŹ%%%
+                                                    strategia marketingowa
+                                                    dotarcie do nowych klientów
+                                                    kampanie online
+                                                    partnerstwa z firmami
+                                                    </PRZYKŁAD2>
 
-                                                %%%ODPOWIEDŹ%%%
-                                                program profilaktyki zdrowotnej
-                                                poprawę jakości życia
+                                                    <PRZYKŁAD3>
+                                                    %%%TEKST%%%
+                                                    Firma ogłosiła wyniki kwartalne, wskazując na wzrost przychodów oraz znaczną redukcję kosztów operacyjnych, co wpłynęło na poprawę marży operacyjnej.
 
-                                                </PRZYKŁAD3>
+                                                    %%%ODPOWIEDŹ%%%
+                                                    wzrost przychodów
+                                                    redukcja kosztów operacyjnych
+                                                    poprawa marży operacyjnej
+                                                    </PRZYKŁAD3>
 
-                                                %%%TEKST%%%                 
-                                                {text}
+                                                    %%%TEKST%%%                 
+                                                    {text}
 
-                                                %%%ODPOWIEDŹ%%%'''}
-            ]
-        )
+                                                    %%%ODPOWIEDŹ%%%'''}
+                ]
+            )
 
-        # FUNCTION CALLING --> PYDANTIC
-
-        answer = check_important_phrases.choices[0].message.content
-        return answer
+            answer = check_important_fragments.choices[0].message.content
+            return answer
 
     def jargon_searcher(self, text):
 
@@ -121,7 +122,7 @@ class TextAnalyzer:
                 {"role": "system",
                  "content": '''Jesteś ekspertem językowym, który z łatwością identyfikuje słowa należące do żargonu specjalistycznego. Twoim zadaniem jest analiza tekstu w celu znalezienia i wypisania takich słów. Odpowiadasz w sposób jasny i profesjonalny.'''},
                 {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim słów należących do żargonu. Mogą to być specjalistyczne terminy techniczne, ekonomiczne, medyczne, prawnicze lub inne charakterystyczne dla danego środowiska.
-                                                Odpowiedź powinna zawierać jedno słowo na linię.
+                                                Odpowiedź powinna zawierać jedno słowo na linię. Jeśli nie znajdziesz żadnych przykładów, zwróć w odpowiedzi po prostu słowo \"brak\".
 
                                                 <PRZYKŁAD1>
                                                 %%%TEKST%%%
@@ -170,7 +171,7 @@ class TextAnalyzer:
             messages=[
                 {"role": "system",
                  "content": '''Jesteś ekspertem językowym, który analizuje tekst pod kątem prostoty języka. Twoim zadaniem jest znalezienie słów, które mogą być zbyt długie, skomplikowane lub trudne do zrozumienia dla przeciętnego odbiorcy. Twoje odpowiedzi powinny być profesjonalne i precyzyjne.'''},
-                {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim słów, które są zbyt długie lub zbyt skomplikowane dla przeciętnego odbiorcy. Wybieraj tylko te słowa, które mogą sprawić trudność, a każda odpowiedź powinna zawierać jedno słowo na linię.
+                {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim słów, które są zbyt długie lub zbyt skomplikowane dla przeciętnego odbiorcy. Wybieraj tylko te słowa, które mogą sprawić trudność, a każda odpowiedź powinna zawierać jedno słowo na linię. Jeśli nie znajdziesz żadnych przykładów, zwróć w odpowiedzi po prostu słowo \"brak\".
 
                                                 <PRZYKŁAD1>
                                                 %%%TEKST%%%
@@ -220,36 +221,41 @@ class TextAnalyzer:
             messages=[
                 {"role": "system",
                  "content": '''Jesteś ekspertem językowym, który analizuje tekst pod kątem jego czytelności. Twoim zadaniem jest znalezienie zdań, które są zbyt długie, złożone i trudne do zrozumienia dla przeciętnego odbiorcy. Twoje odpowiedzi powinny być profesjonalne i precyzyjne.'''},
-                {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim zdań, które mogą być zbyt długie, skomplikowane lub trudne dla przeciętnego odbiorcy. Zwróć szczególną uwagę na zdania zawierające skomplikowane struktury składniowe lub nadmiarowe informacje. Odpowiedź powinna zawierać jedno zdanie na linię.
+                {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim zdań, które mogą być zbyt długie, skomplikowane lub trudne dla przeciętnego odbiorcy. Zwróć szczególną uwagę na zdania zawierające skomplikowane struktury składniowe lub nadmiarowe informacje. Odpowiedź powinna zawierać jedno zdanie na linię. Jeśli nie znajdziesz żadnych przykładów, zwróć w odpowiedzi po prostu słowo \"brak\".
 
-                                                <PRZYKŁAD1>
-                                                %%%TEKST%%%
-                                                Implementacja nowego systemu zarządzania zasobami ludzkimi, który ma na celu zautomatyzowanie procesów rekrutacyjnych, a także zwiększenie efektywności administracyjnej poprzez lepszą organizację i integrację istniejących systemów, stanowi kluczowy element strategii rozwoju przedsiębiorstwa.
+                                                    <PRZYKŁAD1>
+                                                    %%%TEKST%%%
+                                                    Implementacja nowego systemu zarządzania zasobami ludzkimi, który ma na celu zautomatyzowanie procesów rekrutacyjnych, a także zwiększenie efektywności administracyjnej poprzez lepszą organizację i integrację istniejących systemów, stanowi kluczowy element strategii rozwoju przedsiębiorstwa. Proces ten wymaga zaangażowania całego zespołu.
 
-                                                %%%ODPOWIEDŹ%%%
-                                                Implementacja nowego systemu zarządzania zasobami ludzkimi, który ma na celu zautomatyzowanie procesów rekrutacyjnych, a także zwiększenie efektywności administracyjnej poprzez lepszą organizację i integrację istniejących systemów, stanowi kluczowy element strategii rozwoju przedsiębiorstwa.
-                                                </PRZYKŁAD1>
+                                                    %%%ODPOWIEDŹ%%%
+                                                    Implementacja nowego systemu zarządzania zasobami ludzkimi, który ma na celu zautomatyzowanie procesów rekrutacyjnych, a także zwiększenie efektywności administracyjnej poprzez lepszą organizację i integrację istniejących systemów, stanowi kluczowy element strategii rozwoju przedsiębiorstwa.
 
-                                                <PRZYKŁAD2>
-                                                %%%TEKST%%%
-                                                Zgodnie z raportem, który został opublikowany przez niezależnych ekspertów zajmujących się analizą rynku finansowego, wskaźniki rentowności przedsiębiorstw utrzymują się na stabilnym poziomie, jednak przewiduje się, że w kolejnych kwartałach mogą one ulec zmianie w wyniku zmieniających się warunków gospodarczych.
+                                                    <PRZYKŁAD2>
+                                                    %%%TEKST%%%
+                                                    Zgodnie z raportem, który został opublikowany przez niezależnych ekspertów zajmujących się analizą rynku finansowego, wskaźniki rentowności przedsiębiorstw utrzymują się na stabilnym poziomie. Jednak przewiduje się, że w kolejnych kwartałach mogą one ulec zmianie w wyniku zmieniających się warunków gospodarczych.
 
-                                                %%%ODPOWIEDŹ%%%
-                                                Zgodnie z raportem, który został opublikowany przez niezależnych ekspertów zajmujących się analizą rynku finansowego, wskaźniki rentowności przedsiębiorstw utrzymują się na stabilnym poziomie, jednak przewiduje się, że w kolejnych kwartałach mogą one ulec zmianie w wyniku zmieniających się warunków gospodarczych.
-                                                </PRZYKŁAD2>
+                                                    %%%ODPOWIEDŹ%%%
+                                                    Zgodnie z raportem, który został opublikowany przez niezależnych ekspertów zajmujących się analizą rynku finansowego, wskaźniki rentowności przedsiębiorstw utrzymują się na stabilnym poziomie, jednak przewiduje się, że w kolejnych kwartałach mogą one ulec zmianie w wyniku zmieniających się warunków gospodarczych.
 
-                                                <PRZYKŁAD3>
-                                                %%%TEKST%%%
-                                                W związku z wprowadzeniem nowych regulacji prawnych dotyczących ochrony danych osobowych, przedsiębiorstwa będą musiały dostosować swoje wewnętrzne procedury oraz systemy informatyczne, aby zapewnić zgodność z przepisami oraz uniknąć potencjalnych kar finansowych, które mogą być nałożone w przypadku naruszenia obowiązujących regulacji.
+                                                    <PRZYKŁAD3>
+                                                    %%%TEKST%%%
+                                                    W związku z wprowadzeniem nowych regulacji prawnych dotyczących ochrony danych osobowych, przedsiębiorstwa będą musiały dostosować swoje wewnętrzne procedury oraz systemy informatyczne. Dzięki temu zapewnią zgodność z przepisami oraz unikną potencjalnych kar finansowych, które mogą być nałożone w przypadku naruszenia obowiązujących regulacji.
 
-                                                %%%ODPOWIEDŹ%%%
-                                                W związku z wprowadzeniem nowych regulacji prawnych dotyczących ochrony danych osobowych, przedsiębiorstwa będą musiały dostosować swoje wewnętrzne procedury oraz systemy informatyczne, aby zapewnić zgodność z przepisami oraz uniknąć potencjalnych kar finansowych, które mogą być nałożone w przypadku naruszenia obowiązujących regulacji.
-                                                </PRZYKŁAD3>
+                                                    %%%ODPOWIEDŹ%%%
+                                                    W związku z wprowadzeniem nowych regulacji prawnych dotyczących ochrony danych osobowych, przedsiębiorstwa będą musiały dostosować swoje wewnętrzne procedury oraz systemy informatyczne, aby zapewnić zgodność z przepisami oraz uniknąć potencjalnych kar finansowych, które mogą być nałożone w przypadku naruszenia obowiązujących regulacji.
 
-                                                %%%TEKST%%%                 
-                                                {text}
+                                                    <PRZYKŁAD4>
+                                                    %%%TEKST%%%
+                                                    Pracownicy spotkali się na krótkiej naradzie, aby omówić postępy projektu.
 
-                                                %%%ODPOWIEDŹ%%%'''}
+                                                    %%%ODPOWIEDŹ%%%
+                                                    brak
+
+                                                    %%%TEKST%%%                 
+                                                    {text}
+
+                                                    %%%ODPOWIEDŹ%%%'''}
+
             ]
         )
         answer = check_complex_sentences.choices[0].message.content
@@ -262,7 +268,7 @@ class TextAnalyzer:
             messages=[
                 {"role": "system",
                  "content": '''Jesteś ekspertem językowym, który z łatwością identyfikuje słowa, które nie są w języku polskim. Twoim zadaniem jest analiza tekstu w celu znalezienia i wypisania takich słów. Odpowiadasz precyzyjnie i profesjonalnie.'''},
-                {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim słów, które nie są w języku polskim. Mogą to być wyrazy zapożyczone z innych języków lub wtrącenia. Wypisz każde takie słowo w osobnej linii.
+                {"role": "user", "content": f'''Twoim zadaniem jest analiza treści otrzymanego tekstu i znalezienie w nim słów, które nie są w języku polskim. Mogą to być wyrazy zapożyczone z innych języków lub wtrącenia. Wypisz każde takie słowo w osobnej linii. Jeśli nie znajdziesz żadnych przykładów, zwróć w odpowiedzi po prostu słowo \"brak\".
 
                                                 <PRZYKŁAD1>
                                                 %%%TEKST%%%
@@ -306,6 +312,48 @@ class TextAnalyzer:
         answer = check_foreign_words.choices[0].message.content
         return answer
 
+    def repetition_searcher(self, text):
+
+        check_repetitions = CLIENT.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system",
+                 "content": '''Jesteś ekspertem językowym, który z łatwością identyfikuje niepotrzebne powtórzenia w tekście. Twoim zadaniem jest analiza treści w celu znalezienia i wypisania takich powtórzeń, które mogą wpływać na zrozumiałość tekstu. Odpowiadasz profesjonalnie i precyzyjnie.'''},
+                {"role": "user", "content": f'''Twoim zadaniem jest analiza otrzymanego tekstu i znalezienie w nim niepotrzebnych powtórzeń. Wypisz każde powtórzone słowo lub frazę w osobnej linii. Jeśli nie znajdziesz żadnych przykładów, zwróć w odpowiedzi po prostu słowo \"brak\".
+
+                                                <PRZYKŁAD1>
+                                                %%%TEKST%%%
+                                                W czasie spotkania omówiono kwestie związane z wdrażaniem nowego systemu. System ten ma na celu poprawę efektywności procesów oraz zwiększenie bezpieczeństwa danych.
+
+                                                %%%ODPOWIEDŹ%%%
+                                                system
+                                                </PRZYKŁAD1>
+
+                                                <PRZYKŁAD2>
+                                                %%%TEKST%%%
+                                                Projekt wymaga współpracy między działami. Współpraca jest kluczowa dla sukcesu tego przedsięwzięcia.
+
+                                                %%%ODPOWIEDŹ%%%
+                                                współpraca
+                                                </PRZYKŁAD2>
+
+                                                <PRZYKŁAD3>
+                                                %%%TEKST%%%
+                                                Ustalono, że zespół zrealizuje zadanie w ustalonym czasie, a wszystkie ustalone terminy będą dotrzymane.
+
+                                                %%%ODPOWIEDŹ%%%
+                                                ustalone
+                                                </PRZYKŁAD3>
+
+                                                %%%TEKST%%%                 
+                                                {text}
+
+                                                %%%ODPOWIEDŹ%%%'''}
+            ]
+        )
+        answer = check_repetitions.choices[0].message.content
+        return answer
+
     def passive_form_verifier_spacy(self, zdanie):
         doc = nlp(zdanie)
         bierne_czasowniki = []
@@ -314,8 +362,11 @@ class TextAnalyzer:
             if token.pos_ == "VERB":
                 if "Voice=Pass" in token.morph:
                     bierne_czasowniki.append(token.text)
-        
-        return bierne_czasowniki
+
+        if len(bierne_czasowniki) == 0:
+            return "brak"
+        else:
+            return "\n".join(bierne_czasowniki)
 
     def number_analysis_spacy(self, zdanie):
         doc = nlp(zdanie)
@@ -332,6 +383,18 @@ class TextAnalyzer:
             return "\n".join(liczby)
         else:
             return "brak"
+
+    def complex_sentence_searcher_simple(self, text):
+        long_sentences = []
+        sentences = text.split(".")
+        for sentence in sentences:
+            if len(sentence.split()) >= 22:
+                long_sentences.append(sentence)
+
+        if len(long_sentences) == 0:
+            return "brak"
+        else:
+            return "\n".join(long_sentences)
 
 
 
