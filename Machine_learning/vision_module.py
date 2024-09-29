@@ -12,16 +12,14 @@ def detect_vision_anomalies(video_path, frame_interval=1.0):
     preds = []
     for frame in frames:
         is_turned_away = None
-        background_disturbance = False if count_people(frame) == 1 else True
         gesture = None
-        if not background_disturbance:
-            landmarks = detect_faces_and_landmarks(frame)
-            head_pose = estimate_head_pose(frame, landmarks)
-            if head_pose:
-                is_turned_away = is_turned(head_pose)
-            gesture = detect_gestures(frame)
+        landmarks = detect_faces_and_landmarks(frame)
+        head_pose = estimate_head_pose(frame, landmarks)
+        if head_pose:
+            is_turned_away = is_turned(head_pose)
+        gesture = detect_gestures(frame)
         #print(f'Turned away: {is_turned_away}, background disturbance: {background_disturbance}, gesture: {gesture}')
-        preds.append([is_turned_away, background_disturbance, gesture])
+        preds.append([is_turned_away, gesture])
     return preds
 
 def get_vision_anomaly_timestamps(video_path, frame_interval=0.5):
@@ -52,8 +50,7 @@ def get_vision_anomaly_timestamps(video_path, frame_interval=0.5):
     r = {}
 
     r['Turned away'] = anomalies[0]
-    r['Someone in the background'] = anomalies[1]
-    r['Gesture'] = anomalies[2]
+    r['Gesture'] = anomalies[1]
 
     return r
 
