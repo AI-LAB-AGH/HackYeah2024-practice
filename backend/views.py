@@ -9,6 +9,7 @@ from django.middleware.csrf import get_token
 from django.http import FileResponse, HttpResponseNotFound
 from NLP_work.pipeline.pipeline_script import Pipeline
 from Machine_learning.vision_module import get_vision_anomaly_timestamps
+from Machine_learning.audio_analyze import AnalyzeAudio
 
 def index(request):
     csrf_token = get_token(request)
@@ -45,16 +46,24 @@ def process_video(request):
             for chunk in video.chunks():
                 temp_file.write(chunk)
 
+        # text
         pipeline = Pipeline(video_path=temp_file_path)
         pipeline.create_transcript()
         pipeline.load_transcript()
         pipeline.clean_transcripts()
 
-        video_timestamps = get_vision_anomaly_timestamps(video_path=temp_file_path, frame_interval=0.5)
-
         print(pipeline.transcript)
         print(pipeline.get_fog_index())
         print(pipeline.do_tasks_on_video())
+
+        # video
+        video_timestamps = get_vision_anomaly_timestamps(video_path=temp_file_path, frame_interval=0.5)
+
+        # audio
+        audio_path = mp4_to_wav(temp_file_path)
+        analyze_audio = AnalyzeAudio(audio_path)
+        
+
 
         return JsonResponse( { "transcript": pipeline.transcript,
                               "timestamps": pipeline.result['NBest'][0]['Words'],

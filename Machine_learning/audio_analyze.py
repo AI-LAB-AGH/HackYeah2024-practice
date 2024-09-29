@@ -4,9 +4,9 @@ import soundfile as sf
 import numpy as np
 
 class AnalyzeAudio:
-    def __init__(self) -> None:
-        self.audio_path = './audio_folder/'
-        self.audio_path_trimmed = './audio_folder_trimmed/'
+    def __init__(self, audio_path='./audio_path') -> None:
+        self.audio_path = audio_path
+        self.audio_path_trimmed = audio_path + '_trimmed'
 
     def __repr__(self) -> str:
         return f'AnalyzeAudio({self.audio_path})'
